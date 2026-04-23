@@ -42,7 +42,7 @@
         function renderList() {
             const list = document.getElementById('patientList');
             list.innerHTML = MockData.patients.map(p => `
-                <div class="patient-card" onclick="App.navigateTo('patient-detail.html?id=${p.id}')">
+                <div class="patient-card ${p.statusTag === 'danger' ? 'is-abnormal' : ''}" onclick="App.navigateTo('patient-detail.html?id=${p.id}')">
                     <div style="flex: 1;">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
                             <span style="font-size: 18px; font-weight: 700;">${p.name}</span>

@@ -242,6 +242,25 @@ body {
 .status-success { background: #E6F5EE; color: #2BA471; }
 .status-danger { background: #FDEEEE; color: #D54941; }
 
+/* 异常/警示状态全局标注 - 增强版 */
+.is-abnormal {
+    background: #FFF2F0 !important;
+    border: 1.5px solid #FFCCC7 !important;
+    box-shadow: 0 4px 15px rgba(213, 73, 65, 0.12) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.is-abnormal::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: #D54941;
+}
+
 /* 底部 Tab 栏 */
 .tab-bar {
     position: fixed;
