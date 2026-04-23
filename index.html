@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>工作台 - 君实生物临床端</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .doctor-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 220px;
+            background: linear-gradient(180deg, #0052D9 0%, rgba(0, 82, 217, 0) 100%);
+            z-index: -1;
+        }
+        .user-header {
+            display: flex; align-items: center; gap: 16px; margin-top: 30px; margin-bottom: 24px;
+        }
+        .avatar {
+            width: 64px; height: 64px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.4);
+            box-shadow: var(--shadow-md);
+        }
+        .user-info h2 { font-size: 20px; color: white; margin-bottom: 4px; }
+        .user-info p { font-size: 13px; color: rgba(255,255,255,0.8); }
+
+        /* 特色功能块 */
+        .feature-card {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 24px; border-radius: 24px; color: white; margin-bottom: 16px;
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .feature-card::after {
+            content: ''; position: absolute; right: -10%; bottom: -10%;
+            width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;
+        }
+
+        .todo-item {
+            display: flex; align-items: flex-start; gap: 12px; padding: 16px 0;
+            border-bottom: 1px solid #F0F2F5;
+        }
+        .priority-dot {
+            width: 8px; height: 8px; border-radius: 50%; margin-top: 6px;
+        }
+        .dot-high { background: var(--danger-color); box-shadow: 0 0 8px var(--danger-color); }
+        .dot-medium { background: var(--warning-color); }
+
+        .progress-bar {
+            height: 6px; background: #E5E6EB; border-radius: 3px; margin: 10px 0;
+        }
+        .progress-inner {
+            height: 100%; background: var(--primary-gradient); border-radius: 3px; width: 68%;
+        }
+    </style>
+</head>
+<body>
+    <div class="doctor-bg"></div>
+
+    <div id="appContainer">
+        <!-- 分享弹窗 (Modal) -->
+        <div id="shareModal" class="modal-overlay hidden">
+            <div class="qr-modal-box">
+                <div class="qr-header">
+                    探索基于基因检测精准治疗慢性冠脉综合征临床效果的真实世界研究
+                </div>
+                <div class="qr-content-card">
+                    <h2 style="font-size: 24px; font-weight: 700; color: #333; margin-bottom: 4px;">魏子园</h2>
+                    <p style="font-size: 13px; color: var(--text-muted);">脑病科 唐山市中医医院</p>
+                    
+                    <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.8; text-align: left; margin-top: 16px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">
+                        简介：西安某某医学院专业，2020年取得执业医师资格证，5年来一直从事脑病科相关工作，2020年取得执业医师资格证，5年来一直从事脑病科相关工作...
+                    </div>
+
+                    <div class="qr-divider"></div>
+
+                    <div style="width: 160px; height: 160px; margin: 0 auto;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://junshi.com/dr/weiziyuan" style="width: 100%; height: 100%;">
+                    </div>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;">扫描或长按识别二维码<br>进入医生主页</p>
+                </div>
+            </div>
+            <div class="qr-close-btn" onclick="toggleModal(false)">✕</div>
+        </div>
+
+        <!-- Tab 1: 首页工作台 -->
+        <section id="tab-home" class="tab-content">
+            <div class="container" style="padding-top: 20px;">
+                <div class="user-header animate-up">
+                    <div style="position: relative;">
+                        <img src="img/avatar.png" class="avatar">
+                    </div>
+                    <div class="user-info">
+                        <h2 id="userName">黄晓燕</h2>
+                        <p id="userTitle">主治医师 | 胸内科</p>
+                        <div style="display: flex; gap: 8px; margin-top: 6px;">
+                            <span class="status-tag" style="background: rgba(255,255,255,0.2); color: white; border: none; font-size: 10px;">三甲医院</span>
+                            <span class="status-tag" style="background: rgba(255,255,255,0.2); color: white; border: none; font-size: 10px;">唐山市中医医院</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid animate-up" style="animation-delay: 0.1s;">
+                    <div class="stats-item">
+                        <div class="stats-value">12</div>
+                        <div class="stats-label">我的项目</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value">8</div>
+                        <div class="stats-label">本月入组</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value">154</div>
+                        <div class="stats-label">管理患者</div>
+                    </div>
+                </div>
+
+                <div class="action-flex animate-up" style="animation-delay: 0.2s;">
+                    <div class="quick-card bg-peach-light" onclick="toggleModal(true)">
+                        <div class="quick-icon-box bg-orange-solid">📷</div>
+                        <span class="quick-text">专属二维码</span>
+                        <div class="quick-dot"></div>
+                    </div>
+                    <div class="quick-card bg-green-light" onclick="switchTab('management')">
+                        <div class="quick-icon-box bg-green-solid">👥</div>
+                        <span class="quick-text">患者管理</span>
+                        <div class="quick-badge">+3</div>
+                    </div>
+                </div>
+
+                <div class="card animate-up" style="animation-delay: 0.3s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <h3 style="font-size: 16px; font-weight: 700;">项目整体进度</h3>
+                        <span style="font-size: 12px; color: var(--primary-color);">详情 ›</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-inner"></div></div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+                        <span>当前招募: 68/100</span>
+                        <span>完成率: 68%</span>
+                    </div>
+                </div>
+
+                <div class="card animate-up" style="animation-delay: 0.4s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="font-size: 16px; font-weight: 700;">待办事项 <span style="color: var(--danger-color); font-size: 13px;">(14)</span></h3>
+                    </div>
+                    <div id="todoList"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 2: 患者管理入口 -->
+        <section id="tab-management" class="tab-content hidden">
+            <div class="header"><h1>患者管理中心</h1></div>
+            <div class="container animate-up">
+                <div class="action-grid" style="margin-top: 10px;">
+                    <div class="action-btn-circle" onclick="App.navigateTo('patient-list.html')">
+                        <div class="action-icon-circle bg-blue-solid">📋</div>
+                        <span class="action-label">所有患者</span>
+                    </div>
+                    <div class="action-btn-circle" onclick="App.navigateTo('patient-list.html?filter=enrolled')">
+                        <div class="action-icon-circle bg-purple-solid">🎖️</div>
+                        <span class="action-label">入组患者</span>
+                    </div>
+                    <div class="action-btn-circle" onclick="App.navigateTo('stats.html')">
+                        <div class="action-icon-circle bg-orange-gradient">📊</div>
+                        <span class="action-label">数据统计</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">随访漏报预警</h3>
+                    <div style="text-align: center; padding: 30px 0; color: var(--text-muted);">
+                        <div style="font-size: 32px; margin-bottom: 10px;">✅</div>
+                        <p style="font-size: 14px;">本周随访计划执行良好，暂无漏报</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: 我的 -->
+        <section id="tab-my" class="tab-content hidden">
+            <div class="header"><h1>个人中心</h1></div>
+            <div class="container animate-up">
+                <div class="card" style="display: flex; align-items: center; gap: 16px;">
+                    <img src="img/avatar.png" style="width: 60px; height: 60px; border-radius: 50%;">
+                    <div>
+                        <div id="myUserName" style="font-size: 18px; font-weight: 700;">医生姓名</div>
+                        <div id="myUserTitle" style="font-size: 13px; color: var(--text-secondary);">职称 | 部门</div>
+                    </div>
+                </div>
+
+                <div class="card" style="padding: 0 20px;">
+                    <div class="list-item" onclick="App.navigateTo('messages.html')" style="cursor: pointer;">
+                        <span>消息中心</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="badge" style="background: var(--danger-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;">5</span>
+                            <span style="color: var(--text-muted);">›</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="padding: 0 20px;">
+                    <div class="list-item" onclick="App.logout()" style="cursor: pointer; justify-content: center;">
+                        <span style="color: var(--danger-color); font-weight: 600;">退出登录</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部 Tab 栏 -->
+        <nav class="tab-bar">
+            <a href="#" class="tab-item active" onclick="switchTab('home', event)">
+                <span class="tab-icon">🏠</span>
+                <span>首页</span>
+            </a>
+            <a href="#" class="tab-item" onclick="switchTab('management', event)">
+                <span class="tab-icon">👥</span>
+                <span>患者管理</span>
+            </a>
+            <a href="#" class="tab-item" onclick="switchTab('my', event)">
+                <span class="tab-icon">👤</span>
+                <span>我的</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        if (App.checkAuth('index.html')) {
+            initPage();
+        }
+
+        function initPage() {
+            const user = App.getUser();
+            document.getElementById('userName').innerText = user.name;
+            document.getElementById('userTitle').innerText = `${user.title} | ${user.dept}`;
+            document.getElementById('myUserName').innerText = user.name;
+            document.getElementById('myUserTitle').innerText = `${user.title} | ${user.dept}`;
+            
+            renderTodos();
+        }
+
+        function renderTodos() {
+            const list = document.getElementById('todoList');
+            list.innerHTML = MockData.todoList.map(item => `
+                <div class="todo-item" onclick="App.navigateTo('ae-handler.html')">
+                    <div class="priority-dot dot-${item.priority}"></div>
+                    <div style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 700; font-size: 14px;">${item.type}</span>
+                            <span style="color: var(--text-muted); font-size: 11px;">${item.time}</span>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">患者：${item.patient}</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">${item.desc}</div>
+                    </div>
+                    <div style="align-self: center; background: var(--primary-soft); color: var(--primary-color); font-size: 12px; padding: 4px 12px; border-radius: 20px;">去处理</div>
+                </div>
+            `).join('');
+        }
+
+        function toggleModal(show) {
+            const modal = document.getElementById('shareModal');
+            if (show) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function switchTab(tab, event) {
+            if (event) event.preventDefault();
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            document.querySelectorAll('.tab-item').forEach(i => i.classList.remove('active'));
+            
+            const tabs = ['home', 'management', 'my'];
+            const index = tabs.indexOf(tab);
+            if (index !== -1) {
+                document.querySelectorAll('.tab-item')[index].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

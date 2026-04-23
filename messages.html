@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>消息中心 - 君实生物院内患者管理</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .msg-type-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+        .msg-card {
+            display: flex;
+            padding: 18px;
+            position: relative;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s;
+        }
+        .msg-card:active { transform: scale(0.98); background: rgba(255,255,255,0.95); }
+        .msg-unread-dot {
+            position: absolute; top: 18px; right: 18px;
+            width: 8px; height: 8px; background: var(--danger-color);
+            border-radius: 50%;
+        }
+        .msg-time { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+        .msg-title { font-weight: 700; color: var(--text-main); font-size: 15px; margin-bottom: 4px; }
+        .msg-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.4; }
+        
+        .action-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 16px; padding: 0 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="doctor-bg"></div>
+
+    <div class="header">
+        <div class="back-btn" onclick="history.back()">‹</div>
+        <h1>消息中心</h1>
+        <div style="width: 32px;"></div>
+    </div>
+
+    <div class="container animate-up">
+        <div class="action-bar">
+            <span style="font-size: 13px; color: var(--text-muted);">共 5 条新消息</span>
+            <span style="font-size: 13px; color: var(--primary-color); font-weight: 600;" onclick="alert('已全部标记为已读')">全部已读</span>
+        </div>
+
+        <div id="msgList">
+            <!-- 紧急预警 -->
+            <div class="msg-card" onclick="location.href='ae-handler.html'">
+                <div class="msg-unread-dot"></div>
+                <div class="msg-type-icon" style="background: #FFEBEB; color: #D54941;">🚨</div>
+                <div style="flex: 1;">
+                    <div class="msg-title">严重不良事件 (SAE) 预警</div>
+                    <div class="msg-desc">患者 <b>张建国</b> 刚刚上报了 3 级皮疹，请立即处理并评估是否需要停药。</div>
+                    <div class="msg-time">刚刚</div>
+                </div>
+            </div>
+
+            <!-- 系统通知 -->
+            <div class="msg-card">
+                <div class="msg-unread-dot"></div>
+                <div class="msg-type-icon" style="background: #E6F0FF; color: #0052D9;">📢</div>
+                <div style="flex: 1;">
+                    <div class="msg-title">系统版本更新</div>
+                    <div class="msg-desc">V1.2.0 版本已上线，新增「全景时间轴」缩放功能，优化了数据导出的兼容性。</div>
+                    <div class="msg-time">10 分钟前</div>
+                </div>
+            </div>
+
+            <!-- 患者动态 -->
+            <div class="msg-card" onclick="location.href='patient-detail.html'">
+                <div class="msg-unread-dot"></div>
+                <div class="msg-type-icon" style="background: #E8F8E8; color: #2BA471;">👤</div>
+                <div style="flex: 1;">
+                    <div class="msg-title">患者入组进度更新</div>
+                    <div class="msg-desc">您负责的患者 <b>李明</b> 已顺利完成第 3 次访视，CRF 表单已自动生成。</div>
+                    <div class="msg-time">1 小时前</div>
+                </div>
+            </div>
+
+            <!-- 项目提醒 -->
+            <div class="msg-card">
+                <div class="msg-type-icon" style="background: #FFF2E6; color: #E37318;">📅</div>
+                <div style="flex: 1;">
+                    <div class="msg-title">随访逾期提示</div>
+                    <div class="msg-desc">患者 <b>王芳</b> 预定于今日的随访暂未录入数据，请及时联系患者确认情况。</div>
+                    <div class="msg-time">3 小时前</div>
+                </div>
+            </div>
+
+            <!-- 报告提醒 -->
+            <div class="msg-card">
+                <div class="msg-type-icon" style="background: #F3E8FF; color: #7367F0;">📄</div>
+                <div style="flex: 1;">
+                    <div class="msg-title">临床月度分析报告</div>
+                    <div class="msg-desc">3 月份的入组质量分析报告已生成，您可以前往工作台查看 PDF 详版。</div>
+                    <div class="msg-time">昨天 16:45</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

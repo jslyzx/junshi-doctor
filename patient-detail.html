@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>临床全景 - 君实生物临床端</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .timeline-container {
+            position: relative; padding-left: 30px; margin-top: 24px;
+        }
+        .timeline-container::before {
+            content: ''; position: absolute; left: 15px; top: 0; bottom: 0;
+            width: 2px; background: #E5E6EB;
+        }
+        .timeline-item {
+            position: relative; margin-bottom: 30px;
+        }
+        .timeline-dot {
+            position: absolute; left: -22px; top: 0;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: white; border: 3px solid var(--primary-color);
+            z-index: 10;
+        }
+        .dot-milestone { border-color: var(--primary-color); background: var(--primary-color); }
+        .dot-warning { border-color: var(--warning-color); }
+        .dot-danger { border-color: var(--danger-color); background: var(--danger-color); }
+        .dot-success { border-color: var(--success-color); background: var(--success-color); }
+
+        .timeline-card {
+            background: white; border-radius: 16px; padding: 16px;
+            box-shadow: var(--shadow-sm); border: 1px solid #F0F2F5;
+        }
+        .timeline-date { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+        .timeline-title { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .timeline-content { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+        /* 指标趋势图 */
+        .trend-chart {
+            height: 120px; display: flex; align-items: flex-end; gap: 8px; margin-top: 20px;
+            padding: 0 10px; border-bottom: 1px solid #E5E6EB;
+        }
+        .trend-point {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+        }
+        .point-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: var(--primary-color);
+            position: relative;
+        }
+        .point-dot::after {
+            content: ''; position: absolute; left: 50%; bottom: 8px;
+            width: 1px; height: 60px; background: rgba(0, 82, 217, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="back-btn" onclick="history.back()">‹</div>
+        <h1>患者临床全景</h1>
+    </div>
+
+    <div class="container animate-up">
+        <!-- 患者头部摘要 -->
+        <div class="card" style="background: var(--primary-gradient); color: white; border: none;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h2 id="pName" style="font-size: 22px; font-weight: 700;">沈传浩</h2>
+                    <p style="font-size: 14px; opacity: 0.9; margin-top: 4px;">受试者编号: JS-2024-001</p>
+                </div>
+                <div class="status-tag" style="background: rgba(255,255,255,0.2); color: white; border: none;">已入组</div>
+            </div>
+            <div style="display: flex; gap: 24px; margin-top: 20px;">
+                <div><div style="font-size: 11px; opacity: 0.7;">年龄</div><div style="font-weight: 600;">52 岁</div></div>
+                <div><div style="font-size: 11px; opacity: 0.7;">性别</div><div style="font-weight: 600;">男</div></div>
+                <div><div style="font-size: 11px; opacity: 0.7;">入组天数</div><div style="font-weight: 600;">36 天</div></div>
+            </div>
+        </div>
+
+        <!-- 指标趋势展示 -->
+        <div class="card">
+            <div class="card-title" style="font-size: 15px;">肿瘤标志物趋势图 (CEA)</div>
+            <div class="trend-chart">
+                <div class="trend-point"><div class="point-dot" style="bottom: 80%;"></div><span style="font-size: 9px; margin-top: 4px;">D1</span></div>
+                <div class="trend-point"><div class="point-dot" style="bottom: 70%;"></div><span style="font-size: 9px; margin-top: 4px;">D7</span></div>
+                <div class="trend-point"><div class="point-dot" style="bottom: 40%;"></div><span style="font-size: 9px; margin-top: 4px;">D14</span></div>
+                <div class="trend-point"><div class="point-dot" style="bottom: 45%;"></div><span style="font-size: 9px; margin-top: 4px;">D21</span></div>
+                <div class="trend-point"><div class="point-dot" style="bottom: 20%;"></div><span style="font-size: 9px; margin-top: 4px;">D28</span></div>
+            </div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px; font-style: italic;">▲ 趋势说明：患者经首轮给药后，指标呈现显著下降趋势。</p>
+        </div>
+
+        <!-- 惊喜亮点：临床全景时间轴 -->
+        <div class="card">
+            <h3 style="font-size: 16px; font-weight: 700;">临床事件轴</h3>
+            <div class="timeline-container" id="timelineList"></div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        App.checkAuth('patient-detail.html');
+
+        function renderTimeline() {
+            const list = document.getElementById('timelineList');
+            list.innerHTML = MockData.timeline.map(item => `
+                <div class="timeline-item">
+                    <div class="timeline-dot dot-${item.type}"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-date">${item.date}</div>
+                        <div class="timeline-title">${item.title}</div>
+                        <div class="timeline-content">${item.content}</div>
+                        ${item.type === 'danger' ? '<button class="btn btn-primary" style="height: 32px; font-size: 12px; margin-top: 10px; width: 100px;" onclick="App.navigateTo(\'ae-handler.html\')">节点处理</button>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        renderTimeline();
+    </script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* 核心色彩 - 医生端采用更专业、深邃的医疗蓝 */
+    --primary-gradient: linear-gradient(135deg, #0052D9 0%, #003EB3 100%);
+    --bg-gradient: radial-gradient(circle at top right, #F0F5FF 0%, #F5F7FA 100%);
+    
+    --primary-color: #0052D9;
+    --primary-light: #E6F0FF;
+    --primary-soft: rgba(0, 82, 217, 0.08);
+    
+    --success-color: #2BA471;
+    --warning-color: #E37318;
+    --danger-color: #D54941;
+    
+    --text-main: #1D2129;
+    --text-secondary: #4E5969;
+    --text-muted: #86909C;
+    
+    /* 玻璃拟态效果 */
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-blur: blur(20px);
+    
+    /* 阴影 */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 20px 48px rgba(0, 82, 217, 0.12);
+    
+    --safe-area-bottom: env(safe-area-inset-bottom);
+}
+
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Outfit', -apple-system, system-ui, sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-main);
+    line-height: 1.5;
+    overflow-x: hidden;
+    max-width: 500px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* 容器 */
+.container {
+    padding: 20px;
+    padding-bottom: calc(100px + var(--safe-area-bottom));
+}
+
+/* 顶部导航栏 */
+.header {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+}
+
+.header h1 { font-size: 18px; font-weight: 700; flex: 1; text-align: center; }
+
+.back-btn {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--primary-soft);
+    border-radius: 50%;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+/* 医生端大卡片设计 */
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-md);
+}
+
+/* 统计小方格 */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stats-item {
+    text-align: center;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 16px;
+}
+
+.stats-value { font-size: 20px; font-weight: 700; color: var(--primary-color); }
+.stats-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+/* 特色横向卡片按钮 */
+.action-flex {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.quick-card {
+    flex: 1;
+    height: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.quick-card:active { transform: scale(0.97); }
+
+.quick-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-right: 12px;
+}
+
+.quick-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 颜色变体 */
+.bg-peach-light { background: #FFF0E6; }
+.bg-orange-solid { background: #FF7D58; color: white; }
+
+.bg-green-light { background: #E8F8E8; }
+.bg-green-solid { background: #34C759; color: white; }
+
+.quick-badge {
+    position: absolute;
+    top: -5px;
+    right: -2px;
+    background: #FF4D4F;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(255, 77, 79, 0.3);
+}
+
+.quick-dot {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 8px;
+    height: 8px;
+    background: #FF7D58;
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+/* 4 图标网格布局 (用于患者管理 Tab) */
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.action-btn-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.action-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    transition: transform 0.2s;
+}
+
+.action-btn-circle:active .action-icon-circle { transform: scale(0.9); }
+
+.action-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.bg-blue-solid { background: #5B8FF9; }
+.bg-purple-solid { background: #7367F0; }
+.bg-orange-gradient { background: linear-gradient(135deg, #FF9F43 0%, #FF6B00 100%); }
+.bg-green-gradient { background: linear-gradient(135deg, #28C76F 0%, #17A05D 100%); }
+
+/* 列表项 */
+.list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.list-item:last-child { border-bottom: none; }
+
+/* 状态标签 */
+.status-tag {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-active { background: #E6F0FF; color: #0052D9; }
+.status-warning { background: #FFF2E6; color: #E37318; }
+.status-success { background: #E6F5EE; color: #2BA471; }
+.status-danger { background: #FDEEEE; color: #D54941; }
+
+/* 底部 Tab 栏 */
+.tab-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    max-width: 500px;
+    margin: 0 auto;
+    height: calc(64px + var(--safe-area-bottom));
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: var(--safe-area-bottom);
+    z-index: 1000;
+}
+
+.tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-decoration: none;
+}
+
+.tab-item.active { color: var(--primary-color); font-weight: 600; }
+
+.tab-icon { font-size: 22px; margin-bottom: 2px; }
+
+/* 按钮 */
+.btn {
+    width: 100%; height: 52px;
+    border-radius: 16px;
+    border: none;
+    font-size: 16px; font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-primary { background: var(--primary-gradient); color: white; box-shadow: var(--shadow-lg); }
+.btn-primary:active { transform: scale(0.98); }
+
+/* 动画 */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-up { animation: slideUp 0.5s ease-out forwards; }
+
+.hidden { display: none !important; }
+
+/* 分享弹窗样式 */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(12px);
+    z-index: 2000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 0 35px;
+}
+
+.qr-modal-box {
+    width: 100%; max-width: 320px;
+    background: #4A80FF; /* 采用参考图中更明亮的蓝色 */
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.qr-header {
+    background: transparent;
+    padding: 30px 24px 20px;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 600;
+}
+
+.qr-content-card {
+    background: white;
+    margin: 0 16px 16px;
+    border-radius: 24px;
+    position: relative;
+    padding: 35px 24px;
+    text-align: center;
+}
+
+/* 电影票切口效果 - 精确对齐虚线位置 */
+.qr-content-card::before, .qr-content-card::after {
+    content: ''; position: absolute; top: 185px; /* 调整位置 */
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #4A80FF;
+}
+.qr-content-card::before { left: -12px; }
+.qr-content-card::after { right: -12px; }
+
+.qr-divider {
+    border-top: 1.5px dashed #EBEDF0;
+    margin: 25px -24px;
+}
+
+.qr-close-btn {
+    margin-top: 40px;
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.8);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    background: rgba(0,0,0,0.1);
+}
+
+@keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>AE/SAE 处理 - 君实生物临床端</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .select-card {
+            display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;
+        }
+        .select-pill {
+            padding: 10px 16px; border-radius: 12px; background: #F2F3F5;
+            font-size: 14px; color: var(--text-secondary); cursor: pointer;
+            border: 1.5px solid transparent; transition: all 0.2s;
+        }
+        .select-pill.active {
+            background: var(--primary-light); color: var(--primary-color);
+            border-color: var(--primary-color); font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="back-btn" onclick="history.back()">‹</div>
+        <h1>AE/SAE 事件处理</h1>
+    </div>
+
+    <div class="container animate-up">
+        <!-- 事件摘要 -->
+        <div class="card" style="border-left: 5px solid var(--danger-color);">
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">上报患者：沈传浩 (JS-2024-001)</div>
+            <div style="font-size: 18px; font-weight: 700; color: var(--danger-color);">不良事件：2 级皮疹 (瘙痒)</div>
+            <div style="font-size: 14px; color: var(--text-secondary); margin-top: 8px;">发生日期：2024-04-18</div>
+        </div>
+
+        <!-- 处理表单 -->
+        <div class="card">
+            <label class="form-label">1. 不良事件等级 (CTCAE 5.0)</label>
+            <div class="select-card" id="gradeSelect">
+                <div class="select-pill" onclick="selectItem(this, 'g')">1 级 (轻度)</div>
+                <div class="select-pill active" onclick="selectItem(this, 'g')">2 级 (中度)</div>
+                <div class="select-pill" onclick="selectItem(this, 'g')">3 级 (重度)</div>
+                <div class="select-pill" onclick="selectItem(this, 'g')">4 级 (危及生命)</div>
+                <div class="select-pill" onclick="selectItem(this, 'g')">5 级 (死亡相关)</div>
+            </div>
+
+            <label class="form-label" style="margin-top: 24px;">2. 与试验药物相关性</label>
+            <div class="select-card" id="relationSelect">
+                <div class="select-pill" onclick="selectItem(this, 'r')">无关</div>
+                <div class="select-pill" onclick="selectItem(this, 'r')">可能无关</div>
+                <div class="select-pill active" onclick="selectItem(this, 'r')">可能相关</div>
+                <div class="select-pill" onclick="selectItem(this, 'r')">肯定相关</div>
+            </div>
+
+            <label class="form-label" style="margin-top: 24px;">3. 处理意见与总结</label>
+            <div class="select-card" id="actionSelect">
+                <div class="select-pill active" onclick="selectItem(this, 'a')">无需特殊处理</div>
+                <div class="select-pill" onclick="selectItem(this, 'a')">针对性给药</div>
+                <div class="select-pill" onclick="selectItem(this, 'a')">试验药减量</div>
+                <div class="select-pill" onclick="selectItem(this, 'a')">暂停给药</div>
+            </div>
+
+            <textarea class="form-input" style="height: 100px; margin-top: 15px; padding: 12px; font-size: 14px;" placeholder="如有额外说明请补充..."></textarea>
+        </div>
+
+        <button class="btn btn-primary" onclick="handleSubmit()">提交处理决定</button>
+        <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 16px;">提交后将同步至项目专员端进行备案</p>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        App.checkAuth('ae-handler.html');
+
+        function selectItem(el, type) {
+            el.parentElement.querySelectorAll('.select-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function handleSubmit() {
+            alert('处理成功！处理结果已上报至项目系统，该 AE 进入“随访监控”状态。');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
