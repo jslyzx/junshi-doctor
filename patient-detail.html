@@ -89,6 +89,44 @@
             <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px; font-style: italic;">▲ 趋势说明：患者经首轮给药后，指标呈现显著下降趋势。</p>
         </div>
 
+        <!-- 建档档案 (OCR 结果) -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-size: 16px; font-weight: 700;">建档档案</h3>
+                <span style="font-size: 11px; color: var(--primary-color); font-weight: 600;">AI 辅助建档</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="alert('查看身份证原件')">
+                    <span style="font-size: 20px;">🪪</span>
+                    <div>
+                        <div style="font-size: 13px; font-weight: 600;">身份证</div>
+                        <div style="font-size: 10px; color: var(--success-color);">已核验 ✓</div>
+                    </div>
+                </div>
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="alert('查看诊断证明原件')">
+                    <span style="font-size: 20px;">📋</span>
+                    <div>
+                        <div style="font-size: 13px; font-weight: 600;">诊断证明</div>
+                        <div style="font-size: 10px; color: var(--success-color);">已识别 ✓</div>
+                    </div>
+                </div>
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="alert('查看知情同意书 (共 5 页)')">
+                    <span style="font-size: 20px;">🖋️</span>
+                    <div>
+                        <div style="font-size: 13px; font-weight: 600;">知情同意书</div>
+                        <div style="font-size: 10px; color: var(--success-color);">5 页已存 ✓</div>
+                    </div>
+                </div>
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="alert('查看处方单原件')">
+                    <span style="font-size: 20px;">💊</span>
+                    <div>
+                        <div style="font-size: 13px; font-weight: 600;">历史处方</div>
+                        <div style="font-size: 10px; color: var(--text-muted);">已同步</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- 惊喜亮点：临床全景时间轴 -->
         <div class="card">
             <h3 style="font-size: 16px; font-weight: 700;">临床事件轴</h3>
