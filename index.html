@@ -48,6 +48,13 @@
         .progress-inner {
             height: 100%; background: var(--primary-gradient); border-radius: 3px; width: 68%;
         }
+
+        .patient-card {
+            background: white; border-radius: 20px; padding: 16px; margin-bottom: 14px;
+            box-shadow: var(--shadow-sm); border: 1px solid #F0F2F5;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+        }
+        .patient-card.is-abnormal { border: 1px solid rgba(245, 108, 108, 0.3); background: rgba(245, 108, 108, 0.02); }
     </style>
 </head>
 <body>
@@ -98,16 +105,16 @@
 
                 <div class="stats-grid animate-up" style="animation-delay: 0.1s;">
                     <div class="stats-item">
-                        <div class="stats-value">12</div>
-                        <div class="stats-label">我的项目</div>
+                        <div class="stats-value">2</div>
+                        <div class="stats-label">预警信息</div>
                     </div>
                     <div class="stats-item">
                         <div class="stats-value">8</div>
-                        <div class="stats-label">本月入组</div>
+                        <div class="stats-label">管理患者</div>
                     </div>
                     <div class="stats-item">
-                        <div class="stats-value">154</div>
-                        <div class="stats-label">管理患者</div>
+                        <div class="stats-value">2</div>
+                        <div class="stats-label">异常事件</div>
                     </div>
                 </div>
 
@@ -158,7 +165,7 @@
                         <div class="action-icon-circle bg-orange-solid">🚦</div>
                         <span class="action-label">红黄灯患者</span>
                     </div>
-                    <div class="action-btn-circle" onclick="App.navigateTo('ae-handler.html')">
+                    <div class="action-btn-circle" onclick="switchTab('ae')">
                         <div class="action-icon-circle bg-purple-solid">⚠️</div>
                         <span class="action-label">异常事件</span>
                     </div>
@@ -168,17 +175,27 @@
                     </div>
                 </div>
 
-                <div class="card">
-                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">随访漏报预警</h3>
-                    <div style="text-align: center; padding: 30px 0; color: var(--text-muted);">
-                        <div style="font-size: 32px; margin-bottom: 10px;">✅</div>
-                        <p style="font-size: 14px;">本周随访计划执行良好，暂无漏报</p>
-                    </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; margin-bottom: 16px;">
+                    <h3 style="font-size: 16px; font-weight: 700;">近期患者列表</h3>
+                    <span style="font-size: 12px; color: var(--primary-color);" onclick="App.navigateTo('patient-list.html')">查看全部 ›</span>
                 </div>
+                <div id="managementPatientList"></div>
             </div>
         </section>
 
-        <!-- Tab 3: 我的 -->
+        <!-- Tab 3: 异常事件 -->
+        <section id="tab-ae" class="tab-content hidden">
+            <div class="header"><h1>待处理异常事件</h1></div>
+            <div class="container animate-up">
+                <div style="background: white; border-radius: 12px; height: 44px; display: flex; align-items: center; padding: 0 16px; border: 1px solid var(--glass-border); margin-bottom: 20px;">
+                    <span>🔍</span>
+                    <input type="text" placeholder="请输入患者姓名搜索" style="border: none; flex: 1; outline: none; font-size: 14px; margin-left: 8px;">
+                </div>
+                <div id="aeTabList"></div>
+            </div>
+        </section>
+
+        <!-- Tab 4: 我的 -->
         <section id="tab-my" class="tab-content hidden">
             <div class="header"><h1>个人中心</h1></div>
             <div class="container animate-up">
@@ -218,6 +235,10 @@
                 <span class="tab-icon">👥</span>
                 <span>患者管理</span>
             </a>
+            <a href="#" class="tab-item" onclick="switchTab('ae', event)">
+                <span class="tab-icon">⚠️</span>
+                <span>异常事件</span>
+            </a>
             <a href="#" class="tab-item" onclick="switchTab('my', event)">
                 <span class="tab-icon">👤</span>
                 <span>我的</span>
@@ -239,24 +260,68 @@
             document.getElementById('myUserTitle').innerText = `${user.title} | ${user.dept}`;
             
             renderTodos();
+            renderManagementPatients();
+        }
+
+        function renderManagementPatients() {
+            const list = document.getElementById('managementPatientList');
+            if (!list) return;
+            
+            list.innerHTML = MockData.patients.slice(0, 4).map(p => `
+                <div class="patient-card ${p.statusTag === 'danger' ? 'is-abnormal' : ''}" onclick="App.navigateTo('patient-detail.html?id=${p.id}')">
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span style="font-size: 16px; font-weight: 700;">${p.name}</span>
+                            <span style="font-size: 13px; color: var(--text-secondary);">${p.age} 岁</span>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">联系电话：${p.phone}</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">入组日期：${p.enrollDate}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="status-tag status-${p.statusTag}" style="display: inline-block; margin-bottom: 8px;">${p.status}</div>
+                        <div style="color: var(--primary-color); font-size: 11px; font-weight: 600;">上次随访 3天前</div>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function renderTodos() {
             const list = document.getElementById('todoList');
-            list.innerHTML = MockData.todoList.map(item => `
-                <div class="todo-item" onclick="App.navigateTo('ae-handler.html')">
-                    <div class="priority-dot dot-${item.priority}"></div>
-                    <div style="flex: 1;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-weight: 700; font-size: 14px;">${item.type}</span>
-                            <span style="color: var(--text-muted); font-size: 11px;">${item.time}</span>
+            const aeList = document.getElementById('aeTabList');
+            
+            if (list) {
+                list.innerHTML = MockData.todoList.map(item => `
+                    <div class="todo-item" onclick="App.navigateTo('ae-handler.html?id=${item.id}')">
+                        <div class="priority-dot dot-${item.priority}"></div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 700; font-size: 14px;">${item.type}</span>
+                                <span style="color: var(--text-muted); font-size: 11px;">${item.time}</span>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">患者：${item.patient}</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">${item.desc}</div>
                         </div>
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">患者：${item.patient}</div>
-                        <div style="font-size: 12px; color: var(--text-muted);">${item.desc}</div>
+                        <div style="align-self: center; background: var(--primary-soft); color: var(--primary-color); font-size: 12px; padding: 4px 12px; border-radius: 20px;">去处理</div>
                     </div>
-                    <div style="align-self: center; background: var(--primary-soft); color: var(--primary-color); font-size: 12px; padding: 4px 12px; border-radius: 20px;">去处理</div>
-                </div>
-            `).join('');
+                `).join('');
+            }
+
+            if (aeList) {
+                aeList.innerHTML = MockData.todoList.map(item => `
+                    <div class="patient-card" style="align-items: flex-start; cursor: pointer;" onclick="App.navigateTo('ae-handler.html?id=${item.id}')">
+                        <div class="priority-dot dot-${item.priority}" style="margin-right: 12px; margin-top: 6px;"></div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: 700; font-size: 16px;">${item.type}</span>
+                                <span style="color: var(--text-muted); font-size: 12px;">${item.time}</span>
+                            </div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-top: 6px;">患者：<span style="font-weight: 600;">${item.patient}</span></div>
+                            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">描述：${item.desc}</div>
+                        </div>
+                        <div style="align-self: center; background: var(--primary-soft); color: var(--primary-color); font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px; margin-left: 10px;">去处理</div>
+                    </div>
+                `).join('');
+            }
         }
 
         function toggleModal(show) {
@@ -274,7 +339,7 @@
             document.getElementById(`tab-${tab}`).classList.remove('hidden');
             document.querySelectorAll('.tab-item').forEach(i => i.classList.remove('active'));
             
-            const tabs = ['home', 'management', 'my'];
+            const tabs = ['home', 'management', 'ae', 'my'];
             const index = tabs.indexOf(tab);
             if (index !== -1) {
                 document.querySelectorAll('.tab-item')[index].classList.add('active');

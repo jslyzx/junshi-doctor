@@ -58,7 +58,8 @@ window.App = {
 window.MockData = {
     // 首页待办
     todoList: [
-        { id: 1, type: 'AE待处理', time: '10:24', patient: '沈先生', desc: '发生 2 级皮疹，需审核处理意见', priority: 'high' }
+        { id: 1, type: 'AE上报', time: '10:24', patient: '张建军', desc: '发生 2 级皮疹，伴瘙痒', priority: 'high' },
+        { id: 2, type: '服药异常', time: '昨天', patient: '赵刚', desc: '患者反馈漏服一次试验药物', priority: 'medium' }
     ],
 
     // 患者列表
