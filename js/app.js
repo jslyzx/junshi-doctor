@@ -15,10 +15,10 @@ window.App = {
         const role = this.identifyRole(phone);
         const user = {
             id: 'DR' + Math.floor(Math.random() * 1000),
-            name: role === 'doctor' ? '黄晓燕' : '张助理',
+            name: role === 'doctor' ? '黄晓雅' : '张助理',
             title: role === 'doctor' ? '主治医师' : '项目专员',
-            dept: '胸内科',
-            hospital: '君实附属第一医院',
+            dept: '肿瘤科',
+            hospital: '南京鼓楼医院',
             phone: phone,
             role: role,
             isLoggedIn: true
@@ -58,9 +58,7 @@ window.App = {
 window.MockData = {
     // 首页待办
     todoList: [
-        { id: 1, type: 'AE 待处', time: '10:24', patient: '沈先生', desc: '发生 2 级皮疹，需审核处理意见', priority: 'high' },
-        { id: 2, type: '数据录入', time: '昨天', patient: '001', desc: '请填写入选信息', priority: 'medium' },
-        { id: 3, type: '随访确认', time: '昨天', patient: '003', desc: '随访 1 信息待确认', priority: 'medium' }
+        { id: 1, type: 'AE待处理', time: '10:24', patient: '沈先生', desc: '发生 2 级皮疹，需审核处理意见', priority: 'high' }
     ],
 
     // 患者列表
