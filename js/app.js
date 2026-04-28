@@ -52,6 +52,28 @@ window.App = {
 
     navigateTo: function(url) {
         window.location.href = url;
+    },
+
+    getTimeline: function(patientId) {
+        let baseTimeline = [...MockData.timeline];
+        const localData = localStorage.getItem('patient_supplements_' + patientId);
+        const saved = localData ? JSON.parse(localData) : [];
+        const mock = MockData.supplements.filter(s => s.patientId == patientId);
+        const supplements = [...mock, ...saved];
+        
+        supplements.forEach(s => {
+            baseTimeline.push({
+                id: 'sup_' + s.id,
+                date: s.date,
+                title: s.title,
+                content: s.content,
+                photos: s.photos,
+                type: 'info',
+                isSupplement: true
+            });
+        });
+
+        return baseTimeline.sort((a, b) => new Date(b.date) - new Date(a.date));
     }
 };
 
@@ -78,5 +100,9 @@ window.MockData = {
         { date: '2024-03-15', title: '正式入组', content: '符合入排标准，触发给药流程。', type: 'success' },
         { date: '2024-04-10', title: '给药周期 1', content: '完成首轮 PD-1 输注，状态良好。', type: 'info' },
         { date: '2024-04-18', title: '发生 AE (皮疹)', content: '患者自述局部瘙痒，评定为 2 级。', type: 'danger' }
+    ],
+    // 补充材料
+    supplements: [
+        { id: 1, patientId: 101, date: '2024-04-20', title: '补充材料: 门诊病历', content: '专员协助上传的门诊复查记录。', photos: ['https://picsum.photos/id/40/400/600'], type: 'info' }
     ]
 };
