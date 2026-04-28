@@ -34,6 +34,8 @@
         .timeline-date { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
         .timeline-title { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
         .timeline-content { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+        .timeline-photos { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 4px; }
+        .timeline-photo { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 1px solid #F0F2F5; }
 
         /* 指标趋势图 */
         .trend-chart {
@@ -51,6 +53,35 @@
             content: ''; position: absolute; left: 50%; bottom: 8px;
             width: 1px; height: 60px; background: rgba(0, 82, 217, 0.1);
         }
+
+        /* 图片预览模态框 */
+        .viewer-modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.9); z-index: 2000;
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .viewer-modal.active { display: flex; animation: fadeIn 0.3s ease; }
+        .viewer-img { max-width: 90%; max-height: 80%; object-fit: contain; border-radius: 8px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .viewer-close {
+            position: absolute; top: 40px; right: 25px; width: 44px; height: 44px;
+            background: rgba(255,255,255,0.2); color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 24px; z-index: 2010;
+        }
+        .viewer-nav {
+            position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between;
+            transform: translateY(-50%); padding: 0 20px; pointer-events: none;
+        }
+        .viewer-nav-btn {
+            width: 50px; height: 50px; background: rgba(255,255,255,0.1); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; pointer-events: auto; backdrop-filter: blur(5px);
+        }
+        .viewer-info {
+            position: absolute; bottom: 40px; left: 0; right: 0; text-align: center;
+            color: white; font-size: 14px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -96,28 +127,28 @@
                 <span style="font-size: 11px; color: var(--primary-color); font-weight: 600;">AI 辅助建档</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="alert('查看身份证原件')">
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'" onclick="openViewer('https://picsum.photos/id/1011/800/600', '身份证正面')">
                     <span style="font-size: 20px;">🪪</span>
                     <div>
                         <div style="font-size: 13px; font-weight: 600;">身份证</div>
                         <div style="font-size: 10px; color: var(--success-color);">已核验 ✓</div>
                     </div>
                 </div>
-                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="alert('查看诊断证明原件')">
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'" onclick="openViewer('https://picsum.photos/id/1067/800/1200', '诊断证明')">
                     <span style="font-size: 20px;">📋</span>
                     <div>
                         <div style="font-size: 13px; font-weight: 600;">诊断证明</div>
                         <div style="font-size: 10px; color: var(--success-color);">已识别 ✓</div>
                     </div>
                 </div>
-                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="alert('查看知情同意书 (共 5 页)')">
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'" onclick="openViewer(['https://picsum.photos/id/20/800/600', 'https://picsum.photos/id/24/800/600'], '知情同意书')">
                     <span style="font-size: 20px;">🖋️</span>
                     <div>
                         <div style="font-size: 13px; font-weight: 600;">知情同意书</div>
                         <div style="font-size: 10px; color: var(--success-color);">5 页已存 ✓</div>
                     </div>
                 </div>
-                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="alert('查看处方单原件')">
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'" onclick="openViewer('https://picsum.photos/id/1054/800/1000', '历史处方')">
                     <span style="font-size: 20px;">💊</span>
                     <div>
                         <div style="font-size: 13px; font-weight: 600;">历史处方</div>
@@ -134,19 +165,39 @@
         </div>
     </div>
 
+    <!-- 图片预览模态框 -->
+    <div id="imageViewer" class="viewer-modal" onclick="closeViewer()">
+        <div class="viewer-close">✕</div>
+        <div class="viewer-nav">
+            <div class="viewer-nav-btn" onclick="event.stopPropagation(); switchViewerPage(-1)">‹</div>
+            <div class="viewer-nav-btn" onclick="event.stopPropagation(); switchViewerPage(1)">›</div>
+        </div>
+        <img id="viewerImg" class="viewer-img">
+        <div id="viewerInfo" class="viewer-info">第 1 / 1 页</div>
+    </div>
+
     <script src="js/app.js"></script>
     <script>
         App.checkAuth('patient-detail.html');
 
         function renderTimeline() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id') || 101;
+            const timeline = App.getTimeline(id);
             const list = document.getElementById('timelineList');
-            list.innerHTML = MockData.timeline.map(item => `
+            
+            list.innerHTML = timeline.map(item => `
                 <div class="timeline-item">
                     <div class="timeline-dot dot-${item.type}"></div>
                     <div class="timeline-card ${item.type === 'danger' ? 'is-abnormal' : ''}">
                         <div class="timeline-date">${item.date}</div>
                         <div class="timeline-title">${item.title}</div>
                         <div class="timeline-content">${item.content}</div>
+                        ${item.photos ? `
+                            <div class="timeline-photos">
+                                ${item.photos.map(p => `<img src="${p}" class="timeline-photo" onclick="event.stopPropagation(); openViewer('${p}', '${item.title}')">`).join('')}
+                            </div>
+                        ` : ''}
                         ${item.type === 'danger' ? '<button class="btn btn-primary" style="height: 32px; font-size: 12px; margin-top: 10px; width: 100px;" onclick="App.navigateTo(\'ae-handler.html\')">节点处理</button>' : ''}
                     </div>
                 </div>
@@ -154,6 +205,34 @@
         }
 
         renderTimeline();
+
+        // 图片预览逻辑
+        let viewerPhotos = [];
+        let viewerIndex = 0;
+        let viewerTitle = '';
+
+        function openViewer(srcList, title = '') {
+            viewerPhotos = Array.isArray(srcList) ? srcList : [srcList];
+            viewerIndex = 0;
+            viewerTitle = title;
+            updateViewer();
+            document.getElementById('imageViewer').classList.add('active');
+        }
+
+        function updateViewer() {
+            document.getElementById('viewerImg').src = viewerPhotos[viewerIndex];
+            document.getElementById('viewerInfo').innerText = `${viewerTitle} - 第 ${viewerIndex + 1} / ${viewerPhotos.length} 页`;
+            document.querySelector('.viewer-nav').style.display = viewerPhotos.length > 1 ? 'flex' : 'none';
+        }
+
+        function switchViewerPage(dir) {
+            viewerIndex = (viewerIndex + dir + viewerPhotos.length) % viewerPhotos.length;
+            updateViewer();
+        }
+
+        function closeViewer() {
+            document.getElementById('imageViewer').classList.remove('active');
+        }
     </script>
 </body>
 </html>
