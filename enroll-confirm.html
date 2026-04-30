@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>入组确认 - 君实生物临床端</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .patient-info-header {
+            background: white; border-radius: 20px; padding: 24px; margin-bottom: 20px;
+            box-shadow: var(--shadow-sm); border: 1px solid #F0F2F5;
+        }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+        .info-item label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+        .info-item span { font-size: 15px; font-weight: 600; color: var(--text-main); }
+        
+        .confirm-card {
+            background: white; border-radius: 20px; padding: 24px; margin-bottom: 20px;
+            border: 1px solid #F0F2F5;
+        }
+        .reject-reason-box {
+            margin-top: 20px; display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .textarea-custom {
+            width: 100%; border: 1px solid #E5E6EB; border-radius: 12px; padding: 12px;
+            font-size: 14px; outline: none; transition: all 0.2s; background: #F9FAFB;
+        }
+        .textarea-custom:focus { border-color: var(--danger-color); background: white; }
+
+        .btn-group { display: flex; gap: 12px; margin-top: 30px; }
+        .btn-reject {
+            flex: 1; height: 48px; border-radius: 24px; border: 1px solid var(--danger-color);
+            color: var(--danger-color); background: white; font-weight: 600; font-size: 15px;
+        }
+        .btn-confirm {
+            flex: 2; height: 48px; border-radius: 24px; background: var(--primary-gradient);
+            color: white; border: none; font-weight: 600; font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="back-btn" onclick="history.back()">✕</div>
+        <h1>入组信息确认</h1>
+    </div>
+
+    <div class="container">
+        <div id="patientInfo" class="patient-info-header animate-up">
+            <!-- 由 JS 渲染 -->
+        </div>
+
+        <div class="confirm-card animate-up" style="animation-delay: 0.1s;">
+            <div style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">审核意见</div>
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">请核对患者病历资料是否符合项目入排标准。如不符合，请说明具体拒绝原因。</p>
+            
+            <div id="rejectReasonBox" class="reject-reason-box">
+                <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 10px; color: var(--danger-color);">拒绝原因 *</label>
+                <textarea id="rejectReason" class="textarea-custom" rows="4" placeholder="请输入拒绝入组的具体理由（如：不符合入选标准第 3 条...）"></textarea>
+            </div>
+
+            <div class="btn-group">
+                <button id="rejectBtn" class="btn-reject" onclick="handleReject()">拒绝入组</button>
+                <button id="confirmBtn" class="btn-confirm" onclick="handleConfirm()">确认入组</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const taskId = urlParams.get('id');
+        let isRejecting = false;
+
+        function renderPage() {
+            const task = MockData.enrollTasks.find(t => t.id == taskId);
+            if (!task) return;
+
+            document.getElementById('patientInfo').innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #F0F2F5; padding-bottom: 16px; margin-bottom: 16px;">
+                    <div style="font-size: 20px; font-weight: 800;">${task.patient}</div>
+                    <div class="status-tag status-warning">待确认</div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item"><label>性别</label><span>${task.gender}</span></div>
+                    <div class="info-item"><label>年龄</label><span>${task.age} 岁</span></div>
+                    <div class="info-item"><label>主要诊断</label><span>${task.diagnosis}</span></div>
+                    <div class="info-item"><label>分期</label><span>${task.stage}</span></div>
+                    <div class="info-item"><label>提交专员</label><span>${task.helper}</span></div>
+                    <div class="info-item"><label>提交时间</label><span>${task.submitTime}</span></div>
+                </div>
+            `;
+        }
+
+        function handleReject() {
+            if (!isRejecting) {
+                isRejecting = true;
+                document.getElementById('rejectReasonBox').style.display = 'block';
+                document.getElementById('rejectBtn').innerText = '取消拒绝';
+                document.getElementById('rejectBtn').style.background = '#F9FAFB';
+                document.getElementById('rejectBtn').style.borderColor = '#E5E6EB';
+                document.getElementById('rejectBtn').style.color = '#86909C';
+                
+                document.getElementById('confirmBtn').innerText = '确认拒绝';
+                document.getElementById('confirmBtn').style.background = 'var(--danger-color)';
+                return;
+            }
+
+            // 取消拒绝
+            isRejecting = false;
+            document.getElementById('rejectReasonBox').style.display = 'none';
+            document.getElementById('rejectBtn').innerText = '拒绝入组';
+            document.getElementById('rejectBtn').style.background = 'white';
+            document.getElementById('rejectBtn').style.borderColor = 'var(--danger-color)';
+            document.getElementById('rejectBtn').style.color = 'var(--danger-color)';
+            
+            document.getElementById('confirmBtn').innerText = '确认入组';
+            document.getElementById('confirmBtn').style.background = 'var(--primary-gradient)';
+        }
+
+        function handleConfirm() {
+            if (isRejecting) {
+                const reason = document.getElementById('rejectReason').value.trim();
+                if (!reason) {
+                    alert('请填写拒绝原因');
+                    return;
+                }
+                alert('已拒绝入组，原因：' + reason);
+                history.back();
+            } else {
+                alert('入组确认成功！患者已正式入组。');
+                history.back();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', renderPage);
+    </script>
+</body>
+</html>

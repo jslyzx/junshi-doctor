@@ -80,8 +80,13 @@ window.App = {
 window.MockData = {
     // 首页待办
     todoList: [
+        { id: 10, type: '入组确认', time: '刚刚', patient: '吴建国', desc: '专员已提交入组申请，请确认', priority: 'high' },
         { id: 1, type: 'AE上报', time: '10:24', patient: '张建军', desc: '发生 2 级皮疹，伴瘙痒', priority: 'high' },
         { id: 2, type: '服药异常', time: '昨天', patient: '赵刚', desc: '患者反馈漏服一次试验药物', priority: 'medium' }
+    ],
+    // 入组确认待处理数据
+    enrollTasks: [
+        { id: 10, patient: '吴建国', age: '58', gender: '男', diagnosis: '非小细胞肺癌', stage: 'IV 期', helper: '张助理', submitTime: '2024-04-30 16:20' }
     ],
 
     // 患者列表

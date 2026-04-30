@@ -290,8 +290,10 @@
             const aeList = document.getElementById('aeTabList');
             
             if (list) {
-                list.innerHTML = MockData.todoList.map(item => `
-                    <div class="todo-item" onclick="App.navigateTo('ae-handler.html?id=${item.id}')">
+                list.innerHTML = MockData.todoList.map(item => {
+                    const clickUrl = item.type === '入组确认' ? `enroll-confirm.html?id=${item.id}` : `ae-handler.html?id=${item.id}`;
+                    return `
+                    <div class="todo-item" onclick="App.navigateTo('${clickUrl}')">
                         <div class="priority-dot dot-${item.priority}"></div>
                         <div style="flex: 1;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -303,12 +305,14 @@
                         </div>
                         <div style="align-self: center; background: var(--primary-soft); color: var(--primary-color); font-size: 12px; padding: 4px 12px; border-radius: 20px;">去处理</div>
                     </div>
-                `).join('');
+                `}).join('');
             }
 
             if (aeList) {
-                aeList.innerHTML = MockData.todoList.map(item => `
-                    <div class="patient-card" style="align-items: flex-start; cursor: pointer;" onclick="App.navigateTo('ae-handler.html?id=${item.id}')">
+                aeList.innerHTML = MockData.todoList.map(item => {
+                    const clickUrl = item.type === '入组确认' ? `enroll-confirm.html?id=${item.id}` : `ae-handler.html?id=${item.id}`;
+                    return `
+                    <div class="patient-card" style="align-items: flex-start; cursor: pointer;" onclick="App.navigateTo('${clickUrl}')">
                         <div class="priority-dot dot-${item.priority}" style="margin-right: 12px; margin-top: 6px;"></div>
                         <div style="flex: 1;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -320,7 +324,7 @@
                         </div>
                         <div style="align-self: center; background: var(--primary-soft); color: var(--primary-color); font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px; margin-left: 10px;">去处理</div>
                     </div>
-                `).join('');
+                `}).join('');
             }
         }
 
