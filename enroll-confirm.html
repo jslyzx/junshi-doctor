@@ -84,12 +84,51 @@
                 <div class="info-grid">
                     <div class="info-item"><label>性别</label><span>${task.gender}</span></div>
                     <div class="info-item"><label>年龄</label><span>${task.age} 岁</span></div>
+                    <div class="info-item"><label>联系电话</label><span style="color:var(--primary-color)">${task.phone || '-'}</span></div>
                     <div class="info-item"><label>主要诊断</label><span>${task.diagnosis}</span></div>
+                    <div class="info-item" style="grid-column: span 2;"><label>居住地址</label><span>${task.address || '-'}</span></div>
                     <div class="info-item"><label>分期</label><span>${task.stage}</span></div>
                     <div class="info-item"><label>提交专员</label><span>${task.helper}</span></div>
-                    <div class="info-item"><label>提交时间</label><span>${task.submitTime}</span></div>
+                    <div class="info-item" style="grid-column: span 2;"><label>提交时间</label><span>${task.submitTime}</span></div>
                 </div>
             `;
+
+            // 动态添加附件区块
+            const attachmentHtml = `
+                <div class="confirm-card animate-up" style="animation-delay: 0.15s;">
+                    <div style="font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: var(--primary-color);">📄</span>
+                        患者提交资料附件
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                        <div>
+                            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">身份证正面</div>
+                            <div style="width: 100%; height: 100px; border-radius: 12px; overflow: hidden; border: 1px solid #F0F2F5; background: #F7F8FA;">
+                                <img src="${task.idCardPhoto || 'https://picsum.photos/id/1/400/300'}" style="width:100%; height:100%; object-fit: cover;">
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">诊断证明</div>
+                            <div style="width: 100%; height: 100px; border-radius: 12px; overflow: hidden; border: 1px solid #F0F2F5; background: #F7F8FA;">
+                                <img src="${task.diagnosisPhoto || 'https://picsum.photos/id/2/400/300'}" style="width:100%; height:100%; object-fit: cover;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">知情同意书</div>
+                        <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+                            ${(task.consentPhotos || ['https://picsum.photos/id/3/400/300']).map((img, i) => `
+                                <div style="width: 80px; height: 110px; border-radius: 12px; overflow: hidden; flex-shrink: 0; border: 1px solid #F0F2F5;">
+                                    <img src="${img}" style="width:100%; height:100%; object-fit: cover;">
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('patientInfo').insertAdjacentHTML('afterend', attachmentHtml);
         }
 
         function handleReject() {

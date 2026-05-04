@@ -86,7 +86,24 @@ window.MockData = {
     ],
     // 入组确认待处理数据
     enrollTasks: [
-        { id: 10, patient: '吴建国', age: '58', gender: '男', diagnosis: '非小细胞肺癌', stage: 'IV 期', helper: '张助理', submitTime: '2024-04-30 16:20' }
+        { 
+            id: 10, 
+            patient: '吴建国', 
+            age: '58', 
+            gender: '男', 
+            diagnosis: '非小细胞肺癌', 
+            stage: 'IV 期', 
+            helper: '张助理', 
+            submitTime: '2024-04-30 16:20',
+            phone: '138****8888',
+            address: '上海市浦东新区张江路 888 弄',
+            idCardPhoto: 'https://images.unsplash.com/photo-1554224155-1696413575b3?w=400',
+            diagnosisPhoto: 'https://images.unsplash.com/photo-1576091160550-2173dad99978?w=400',
+            consentPhotos: [
+                'https://images.unsplash.com/photo-1584433144859-1fc3ab84a9ec?w=400',
+                'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=400'
+            ]
+        }
     ],
 
     // 患者列表
