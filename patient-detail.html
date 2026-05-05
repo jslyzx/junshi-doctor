@@ -1,89 +1,297 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>临床全景 - 君实生物临床端</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         .timeline-container {
-            position: relative; padding-left: 30px; margin-top: 24px;
+            position: relative;
+            padding-left: 30px;
+            margin-top: 24px;
         }
+
         .timeline-container::before {
-            content: ''; position: absolute; left: 15px; top: 0; bottom: 0;
-            width: 2px; background: #E5E6EB;
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #E5E6EB;
         }
+
         .timeline-item {
-            position: relative; margin-bottom: 30px;
+            position: relative;
+            margin-bottom: 30px;
         }
+
         .timeline-dot {
-            position: absolute; left: -22px; top: 0;
-            width: 16px; height: 16px; border-radius: 50%;
-            background: white; border: 3px solid var(--primary-color);
+            position: absolute;
+            left: -22px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--primary-color);
             z-index: 10;
         }
-        .dot-milestone { border-color: var(--primary-color); background: var(--primary-color); }
-        .dot-warning { border-color: var(--warning-color); }
-        .dot-danger { border-color: var(--danger-color); background: var(--danger-color); }
-        .dot-success { border-color: var(--success-color); background: var(--success-color); }
+
+        .dot-milestone {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+        }
+
+        .dot-warning {
+            border-color: var(--warning-color);
+        }
+
+        .dot-danger {
+            border-color: var(--danger-color);
+            background: var(--danger-color);
+        }
+
+        .dot-success {
+            border-color: var(--success-color);
+            background: var(--success-color);
+        }
 
         .timeline-card {
-            background: white; border-radius: 16px; padding: 16px;
-            box-shadow: var(--shadow-sm); border: 1px solid #F0F2F5;
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #F0F2F5;
         }
-        .timeline-date { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
-        .timeline-title { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
-        .timeline-content { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
-        .timeline-photos { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 4px; }
-        .timeline-photo { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 1px solid #F0F2F5; }
+
+        .timeline-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .timeline-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .timeline-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .timeline-photos {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .timeline-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 1px solid #F0F2F5;
+        }
 
         /* 指标趋势图 */
         .trend-chart {
-            height: 120px; display: flex; align-items: flex-end; gap: 8px; margin-top: 20px;
-            padding: 0 10px; border-bottom: 1px solid #E5E6EB;
+            height: 120px;
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 0 10px;
+            border-bottom: 1px solid #E5E6EB;
         }
+
         .trend-point {
-            flex: 1; display: flex; flex-direction: column; align-items: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
         .point-dot {
-            width: 8px; height: 8px; border-radius: 50%; background: var(--primary-color);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary-color);
             position: relative;
         }
+
         .point-dot::after {
-            content: ''; position: absolute; left: 50%; bottom: 8px;
-            width: 1px; height: 60px; background: rgba(0, 82, 217, 0.1);
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 8px;
+            width: 1px;
+            height: 60px;
+            background: rgba(0, 82, 217, 0.1);
+        }
+
+        /* 风险灯样式 */
+        .risk-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 10px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .risk-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .risk-dot.red {
+            background: #FF4D4F;
+            box-shadow: 0 0 10px #FF4D4F;
+            animation: pulse-red 2s infinite;
+        }
+
+        .risk-dot.yellow {
+            background: #FAAD14;
+            box-shadow: 0 0 8px #FAAD14;
+        }
+
+        .risk-dot.green {
+            background: #52C41A;
+            box-shadow: 0 0 8px #52C41A;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(255, 77, 79, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 77, 79, 0);
+            }
+        }
+
+        .med-status-tag {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
         }
 
         /* 图片预览模态框 */
         .viewer-modal {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.9); z-index: 2000;
-            display: none; align-items: center; justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
             backdrop-filter: blur(10px);
         }
-        .viewer-modal.active { display: flex; animation: fadeIn 0.3s ease; }
-        .viewer-img { max-width: 90%; max-height: 80%; object-fit: contain; border-radius: 8px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+
+        .viewer-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .viewer-img {
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
         .viewer-close {
-            position: absolute; top: 40px; right: 25px; width: 44px; height: 44px;
-            background: rgba(255,255,255,0.2); color: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 24px; z-index: 2010;
+            position: absolute;
+            top: 40px;
+            right: 25px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            z-index: 2010;
         }
+
         .viewer-nav {
-            position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between;
-            transform: translateY(-50%); padding: 0 20px; pointer-events: none;
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 20px;
+            pointer-events: none;
         }
+
         .viewer-nav-btn {
-            width: 50px; height: 50px; background: rgba(255,255,255,0.1); color: white;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 30px; pointer-events: auto; backdrop-filter: blur(5px);
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            pointer-events: auto;
+            backdrop-filter: blur(5px);
         }
+
         .viewer-info {
-            position: absolute; bottom: 40px; left: 0; right: 0; text-align: center;
-            color: white; font-size: 14px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div class="back-btn" onclick="history.back()">‹</div>
@@ -95,15 +303,32 @@
         <div class="card" style="background: var(--primary-gradient); color: white; border: none;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
-                    <h2 id="pName" style="font-size: 22px; font-weight: 700;">沈传浩</h2>
-                    <p style="font-size: 14px; opacity: 0.9; margin-top: 4px;">受试者编号: JS-2024-001</p>
+                    <h2 id="pName" style="font-size: 22px; font-weight: 700;">-</h2>
+                    <p id="pNo" style="font-size: 14px; opacity: 0.9; margin-top: 4px;">受试者编号: JS-2024-000</p>
+                    <div style="display: flex; gap: 10px; margin-top: 12px; align-items: center;">
+                        <span id="pMedStatus" class="med-status-tag">在研中</span>
+                        <div class="risk-indicator">
+                            <span id="pRiskDot" class="risk-dot green"></span>
+                            <span id="pRiskText">低风险</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="status-tag" style="background: rgba(255,255,255,0.2); color: white; border: none;">已入组</div>
+                <div id="pStatus" class="status-tag"
+                    style="background: rgba(255,255,255,0.2); color: white; border: none;">-</div>
             </div>
             <div style="display: flex; gap: 24px; margin-top: 20px;">
-                <div><div style="font-size: 11px; opacity: 0.7;">年龄</div><div style="font-weight: 600;">52 岁</div></div>
-                <div><div style="font-size: 11px; opacity: 0.7;">性别</div><div style="font-weight: 600;">男</div></div>
-                <div><div style="font-size: 11px; opacity: 0.7;">入组天数</div><div style="font-weight: 600;">36 天</div></div>
+                <div>
+                    <div style="font-size: 11px; opacity: 0.7;">年龄</div>
+                    <div id="pAge" style="font-weight: 600;">-</div>
+                </div>
+                <div>
+                    <div style="font-size: 11px; opacity: 0.7;">性别</div>
+                    <div id="pGender" style="font-weight: 600;">男</div>
+                </div>
+                <div>
+                    <div style="font-size: 11px; opacity: 0.7;">入组天数</div>
+                    <div style="font-weight: 600;">36 天</div>
+                </div>
             </div>
         </div>
 
@@ -111,13 +336,29 @@
         <div class="card">
             <div class="card-title" style="font-size: 15px;">肿瘤标志物趋势图 (CEA)</div>
             <div class="trend-chart">
-                <div class="trend-point"><div class="point-dot" style="bottom: 80%;"></div><span style="font-size: 9px; margin-top: 4px;">D1</span></div>
-                <div class="trend-point"><div class="point-dot" style="bottom: 70%;"></div><span style="font-size: 9px; margin-top: 4px;">D7</span></div>
-                <div class="trend-point"><div class="point-dot" style="bottom: 40%;"></div><span style="font-size: 9px; margin-top: 4px;">D14</span></div>
-                <div class="trend-point"><div class="point-dot" style="bottom: 45%;"></div><span style="font-size: 9px; margin-top: 4px;">D21</span></div>
-                <div class="trend-point"><div class="point-dot" style="bottom: 20%;"></div><span style="font-size: 9px; margin-top: 4px;">D28</span></div>
+                <div class="trend-point">
+                    <div class="point-dot" style="bottom: 80%;"></div><span
+                        style="font-size: 9px; margin-top: 4px;">D1</span>
+                </div>
+                <div class="trend-point">
+                    <div class="point-dot" style="bottom: 70%;"></div><span
+                        style="font-size: 9px; margin-top: 4px;">D7</span>
+                </div>
+                <div class="trend-point">
+                    <div class="point-dot" style="bottom: 40%;"></div><span
+                        style="font-size: 9px; margin-top: 4px;">D14</span>
+                </div>
+                <div class="trend-point">
+                    <div class="point-dot" style="bottom: 45%;"></div><span
+                        style="font-size: 9px; margin-top: 4px;">D21</span>
+                </div>
+                <div class="trend-point">
+                    <div class="point-dot" style="bottom: 20%;"></div><span
+                        style="font-size: 9px; margin-top: 4px;">D28</span>
+                </div>
             </div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px; font-style: italic;">▲ 趋势说明：患者经首轮给药后，指标呈现显著下降趋势。</p>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px; font-style: italic;">▲
+                趋势说明：患者经首轮给药后，指标呈现显著下降趋势。</p>
         </div>
 
         <!-- 建档档案 (OCR 结果) -->
@@ -127,28 +368,36 @@
                 <span style="font-size: 11px; color: var(--primary-color); font-weight: 600;">AI 辅助建档</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'" onclick="openViewer('https://picsum.photos/id/1011/800/600', '身份证正面')">
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;"
+                    onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'"
+                    onclick="openViewer('https://picsum.photos/id/1011/800/600', '身份证正面')">
                     <span style="font-size: 20px;">🪪</span>
                     <div>
                         <div style="font-size: 13px; font-weight: 600;">身份证</div>
                         <div style="font-size: 10px; color: var(--success-color);">已核验 ✓</div>
                     </div>
                 </div>
-                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'" onclick="openViewer('https://picsum.photos/id/1067/800/1200', '诊断证明')">
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;"
+                    onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'"
+                    onclick="openViewer('https://picsum.photos/id/1067/800/1200', '诊断证明')">
                     <span style="font-size: 20px;">📋</span>
                     <div>
                         <div style="font-size: 13px; font-weight: 600;">诊断证明</div>
                         <div style="font-size: 10px; color: var(--success-color);">已识别 ✓</div>
                     </div>
                 </div>
-                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'" onclick="openViewer(['https://picsum.photos/id/20/800/600', 'https://picsum.photos/id/24/800/600'], '知情同意书')">
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;"
+                    onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'"
+                    onclick="openViewer(['https://picsum.photos/id/20/800/600', 'https://picsum.photos/id/24/800/600'], '知情同意书')">
                     <span style="font-size: 20px;">🖋️</span>
                     <div>
                         <div style="font-size: 13px; font-weight: 600;">知情同意书</div>
                         <div style="font-size: 10px; color: var(--success-color);">5 页已存 ✓</div>
                     </div>
                 </div>
-                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;" onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'" onclick="openViewer('https://picsum.photos/id/1054/800/1000', '历史处方')">
+                <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;"
+                    onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'"
+                    onclick="openViewer('https://picsum.photos/id/1054/800/1000', '历史处方')">
                     <span style="font-size: 20px;">💊</span>
                     <div>
                         <div style="font-size: 13px; font-weight: 600;">历史处方</div>
@@ -180,12 +429,29 @@
     <script>
         App.checkAuth('patient-detail.html');
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const patientId = urlParams.get('id') || 101;
+
+        function initPatient() {
+            const p = App.getPatient(patientId);
+            if (!p) return;
+
+            document.getElementById('pName').innerText = p.name;
+            document.getElementById('pNo').innerText = `受试者编号: JS-2024-${p.id}`;
+            document.getElementById('pStatus').innerText = p.status;
+            document.getElementById('pAge').innerText = p.age + ' 岁';
+            document.getElementById('pMedStatus').innerText = p.medicationStatus || '用药中';
+
+            const riskDot = document.getElementById('pRiskDot');
+            const riskText = document.getElementById('pRiskText');
+            riskDot.className = 'risk-dot ' + p.riskLevel;
+            riskText.innerText = p.riskLevel === 'red' ? '高风险' : (p.riskLevel === 'yellow' ? '中风险' : '低风险');
+        }
+
         function renderTimeline() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id') || 101;
-            const timeline = App.getTimeline(id);
+            const timeline = App.getTimeline(patientId);
             const list = document.getElementById('timelineList');
-            
+
             list.innerHTML = timeline.map(item => `
                 <div class="timeline-item">
                     <div class="timeline-dot dot-${item.type}"></div>
@@ -204,6 +470,7 @@
             `).join('');
         }
 
+        initPatient();
         renderTimeline();
 
         // 图片预览逻辑
@@ -235,4 +502,5 @@
         }
     </script>
 </body>
+
 </html>

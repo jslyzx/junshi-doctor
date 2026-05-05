@@ -4,14 +4,14 @@
 
 window.App = {
     // 根据手机号判断角色
-    identifyRole: function(phone) {
+    identifyRole: function (phone) {
         if (phone.endsWith('888')) return 'doctor';
         if (phone.endsWith('999')) return 'helper';
         return 'doctor'; // 默认进入医生端
     },
 
     // 登录
-    login: function(phone) {
+    login: function (phone) {
         const role = this.identifyRole(phone);
         const user = {
             id: 'DR' + Math.floor(Math.random() * 1000),
@@ -28,7 +28,7 @@ window.App = {
     },
 
     // 检查权限
-    checkAuth: function(pageName) {
+    checkAuth: function (pageName) {
         const user = JSON.parse(localStorage.getItem('doctor_user') || '{}');
         if (!user.isLoggedIn && pageName !== 'login.html') {
             window.location.href = 'login.html';
@@ -41,26 +41,26 @@ window.App = {
         return true;
     },
 
-    getUser: function() {
+    getUser: function () {
         return JSON.parse(localStorage.getItem('doctor_user') || '{}');
     },
 
-    logout: function() {
+    logout: function () {
         localStorage.removeItem('doctor_user');
         window.location.href = 'login.html';
     },
 
-    navigateTo: function(url) {
+    navigateTo: function (url) {
         window.location.href = url;
     },
 
-    getTimeline: function(patientId) {
+    getTimeline: function (patientId) {
         let baseTimeline = [...MockData.timeline];
         const localData = localStorage.getItem('patient_supplements_' + patientId);
         const saved = localData ? JSON.parse(localData) : [];
         const mock = MockData.supplements.filter(s => s.patientId == patientId);
         const supplements = [...mock, ...saved];
-        
+
         supplements.forEach(s => {
             baseTimeline.push({
                 id: 'sup_' + s.id,
@@ -74,6 +74,10 @@ window.App = {
         });
 
         return baseTimeline.sort((a, b) => new Date(b.date) - new Date(a.date));
+    },
+
+    getPatient: function (id) {
+        return MockData.patients.find(p => p.id == id);
     }
 };
 
@@ -86,14 +90,14 @@ window.MockData = {
     ],
     // 入组确认待处理数据
     enrollTasks: [
-        { 
-            id: 10, 
-            patient: '吴建国', 
-            age: '58', 
-            gender: '男', 
-            diagnosis: '非小细胞肺癌', 
-            stage: 'IV 期', 
-            helper: '张助理', 
+        {
+            id: 10,
+            patient: '吴建国',
+            age: '58',
+            gender: '男',
+            diagnosis: '非小细胞肺癌',
+            stage: 'IV 期',
+            helper: '张助理',
             submitTime: '2024-04-30 16:20',
             phone: '138****8888',
             address: '上海市浦东新区张江路 888 弄',
@@ -108,11 +112,11 @@ window.MockData = {
 
     // 患者列表
     patients: [
-        { id: 101, name: '沈传浩', age: 52, status: '已入组', statusTag: 'success', phone: '15201234701', enrollDate: '2024-03-15', ae: '有' },
-        { id: 102, name: '张英杰', age: 45, status: '筛选中', statusTag: 'warning', phone: '13811223344', enrollDate: '-', ae: '无' },
-        { id: 103, name: '王丽华', age: 61, status: '随访中', statusTag: 'active', phone: '13599887766', enrollDate: '2024-02-10', ae: '无' },
-        { id: 104, name: '刘保平', age: 48, status: '发生 AE', statusTag: 'danger', phone: '17300000000', enrollDate: '2024-04-01', ae: '有' },
-        { id: 105, name: '赵大勇', age: 55, status: '出组', statusTag: 'muted', phone: '13900112233', enrollDate: '2023-11-20', ae: '无' }
+        { id: 101, name: '沈传浩', age: 52, status: '已入组', statusTag: 'success', phone: '15201234701', enrollDate: '2024-03-15', ae: '有', medicationStatus: '用药中', riskLevel: 'green' },
+        { id: 102, name: '张英杰', age: 45, status: '筛选中', statusTag: 'warning', phone: '13811223344', enrollDate: '-', ae: '无', medicationStatus: '未确认', riskLevel: 'green' },
+        { id: 103, name: '王丽华', age: 61, status: '随访中', statusTag: 'active', phone: '13599887766', enrollDate: '2024-02-10', ae: '无', medicationStatus: '用药中', riskLevel: 'yellow' },
+        { id: 104, name: '刘保平', age: 48, status: '发生 AE', statusTag: 'danger', phone: '17300000000', enrollDate: '2024-04-01', ae: '有', medicationStatus: '暂停', riskLevel: 'red' },
+        { id: 105, name: '赵大勇', age: 55, status: '出组', statusTag: 'muted', phone: '13900112233', enrollDate: '2023-11-20', ae: '无', medicationStatus: '停药', riskLevel: 'green' }
     ],
 
     // 患者时间轴 (全景视图)

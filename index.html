@@ -55,6 +55,18 @@
             display: flex; justify-content: space-between; align-items: center; cursor: pointer;
         }
         .patient-card.is-abnormal { border: 1px solid rgba(245, 108, 108, 0.3); background: rgba(245, 108, 108, 0.02); }
+
+        .risk-dot-small {
+            width: 8px; height: 8px; border-radius: 50%;
+        }
+        .risk-dot-small.red { background: #FF4D4F; box-shadow: 0 0 6px rgba(255, 77, 79, 0.6); }
+        .risk-dot-small.yellow { background: #FAAD14; }
+        .risk-dot-small.green { background: #52C41A; }
+        
+        .med-tag-mini {
+            font-size: 10px; background: var(--primary-soft); color: var(--primary-color);
+            padding: 2px 6px; border-radius: 4px; font-weight: 500; margin-left: 4px;
+        }
     </style>
 </head>
 <body>
@@ -271,8 +283,10 @@
                 <div class="patient-card ${p.statusTag === 'danger' ? 'is-abnormal' : ''}" onclick="App.navigateTo('patient-detail.html?id=${p.id}')">
                     <div style="flex: 1;">
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span class="risk-dot-small ${p.riskLevel}"></span>
                             <span style="font-size: 16px; font-weight: 700;">${p.name}</span>
                             <span style="font-size: 13px; color: var(--text-secondary);">${p.age} 岁</span>
+                            <span class="med-tag-mini">${p.medicationStatus}</span>
                         </div>
                         <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">联系电话：${p.phone}</div>
                         <div style="font-size: 12px; color: var(--text-muted);">入组日期：${p.enrollDate}</div>
