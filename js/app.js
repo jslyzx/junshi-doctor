@@ -85,6 +85,8 @@ window.MockData = {
     // 首页待办
     todoList: [
         { id: 10, type: '入组确认', time: '刚刚', patient: '吴建国', desc: '专员已提交入组申请，请确认', priority: 'high' },
+        { id: 11, type: '入组确认', time: '10:00', patient: '林春梅', desc: '资料核验已通过，待入组确认', priority: 'high' },
+        { id: 12, type: '入组确认', time: '09:30', patient: '郑大成', desc: '知情同意书已签署，待入组确认', priority: 'high' },
         { id: 1, type: 'AE上报', time: '10:24', patient: '张建军', desc: '发生 2 级皮疹，伴瘙痒', priority: 'high' },
         { id: 2, type: '服药异常', time: '昨天', patient: '赵刚', desc: '患者反馈漏服一次试验药物', priority: 'medium' }
     ],

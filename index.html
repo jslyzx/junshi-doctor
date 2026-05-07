@@ -1,74 +1,202 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>工作台 - 君实生物临床端</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         .doctor-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 220px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 220px;
             background: linear-gradient(180deg, #0052D9 0%, rgba(0, 82, 217, 0) 100%);
             z-index: -1;
         }
+
         .user-header {
-            display: flex; align-items: center; gap: 16px; margin-top: 30px; margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 30px;
+            margin-bottom: 24px;
         }
+
         .avatar {
-            width: 64px; height: 64px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.4);
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.4);
             box-shadow: var(--shadow-md);
         }
-        .user-info h2 { font-size: 20px; color: white; margin-bottom: 4px; }
-        .user-info p { font-size: 13px; color: rgba(255,255,255,0.8); }
+
+        .user-info h2 {
+            font-size: 20px;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .user-info p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
 
         /* 特色功能块 */
         .feature-card {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 24px; border-radius: 24px; color: white; margin-bottom: 16px;
-            cursor: pointer; position: relative; overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px;
+            border-radius: 24px;
+            color: white;
+            margin-bottom: 16px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
+
         .feature-card::after {
-            content: ''; position: absolute; right: -10%; bottom: -10%;
-            width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;
+            content: '';
+            position: absolute;
+            right: -10%;
+            bottom: -10%;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
         }
 
         .todo-item {
-            display: flex; align-items: flex-start; gap: 12px; padding: 16px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px 0;
             border-bottom: 1px solid #F0F2F5;
         }
+
         .priority-dot {
-            width: 8px; height: 8px; border-radius: 50%; margin-top: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 6px;
         }
-        .dot-high { background: var(--danger-color); box-shadow: 0 0 8px var(--danger-color); }
-        .dot-medium { background: var(--warning-color); }
+
+        .dot-high {
+            background: var(--danger-color);
+            box-shadow: 0 0 8px var(--danger-color);
+        }
+
+        .dot-medium {
+            background: var(--warning-color);
+        }
 
         .progress-bar {
-            height: 6px; background: #E5E6EB; border-radius: 3px; margin: 10px 0;
+            height: 6px;
+            background: #E5E6EB;
+            border-radius: 3px;
+            margin: 10px 0;
         }
+
         .progress-inner {
-            height: 100%; background: var(--primary-gradient); border-radius: 3px; width: 68%;
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 3px;
+            width: 68%;
         }
 
         .patient-card {
-            background: white; border-radius: 20px; padding: 16px; margin-bottom: 14px;
-            box-shadow: var(--shadow-sm); border: 1px solid #F0F2F5;
-            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #F0F2F5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
         }
-        .patient-card.is-abnormal { border: 1px solid rgba(245, 108, 108, 0.3); background: rgba(245, 108, 108, 0.02); }
+
+        .patient-card.is-abnormal {
+            border: 1px solid rgba(245, 108, 108, 0.3);
+            background: rgba(245, 108, 108, 0.02);
+        }
 
         .risk-dot-small {
-            width: 8px; height: 8px; border-radius: 50%;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
         }
-        .risk-dot-small.red { background: #FF4D4F; box-shadow: 0 0 6px rgba(255, 77, 79, 0.6); }
-        .risk-dot-small.yellow { background: #FAAD14; }
-        .risk-dot-small.green { background: #52C41A; }
-        
+
+        .risk-dot-small.red {
+            background: #FF4D4F;
+            box-shadow: 0 0 6px rgba(255, 77, 79, 0.6);
+        }
+
+        .risk-dot-small.yellow {
+            background: #FAAD14;
+        }
+
+        .risk-dot-small.green {
+            background: #52C41A;
+        }
+
         .med-tag-mini {
-            font-size: 10px; background: var(--primary-soft); color: var(--primary-color);
-            padding: 2px 6px; border-radius: 4px; font-weight: 500; margin-left: 4px;
+            font-size: 10px;
+            background: var(--primary-soft);
+            color: var(--primary-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+            margin-left: 4px;
+        }
+
+        /* 沉浸式顶部样式 */
+        .tab-header-bg {
+            padding: 50px 20px 40px;
+            background: linear-gradient(180deg, #0052D9 0%, #0052D9 60%, rgba(0, 82, 217, 0) 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .sm-mini-btn {
+            background: white;
+            color: var(--primary-color);
+            border: 1px solid rgba(0, 82, 217, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .sm-mini-btn:active {
+            transform: scale(0.95);
+        }
+
+        .search-box-wrap {
+            background: white;
+            border-radius: 16px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin: -32px 20px 24px;
+            position: relative;
+            z-index: 110;
+            border: 1px solid #F0F2F5;
         }
     </style>
 </head>
+
 <body>
     <div class="doctor-bg"></div>
 
@@ -82,15 +210,17 @@
                 <div class="qr-content-card">
                     <h2 style="font-size: 24px; font-weight: 700; color: #333; margin-bottom: 4px;">黄晓雅</h2>
                     <p style="font-size: 13px; color: var(--text-muted);">肿瘤科 南京鼓楼医院</p>
-                    
-                    <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.8; text-align: left; margin-top: 16px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">
+
+                    <div
+                        style="font-size: 11px; color: var(--text-secondary); line-height: 1.8; text-align: left; margin-top: 16px; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">
                         简介：南京某医学院专业，2020年取得执业医师资格证，5年来一直从事肿瘤科相关工作，2020年取得执业医师资格证，5年来一直从事肿瘤科相关工作...
                     </div>
 
                     <div class="qr-divider"></div>
 
                     <div style="width: 160px; height: 160px; margin: 0 auto;">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://junshi.com/dr/weiziyuan" style="width: 100%; height: 100%;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://junshi.com/dr/weiziyuan"
+                            style="width: 100%; height: 100%;">
                     </div>
                     <p style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;">扫描或长按识别二维码<br>进入医生主页</p>
                 </div>
@@ -109,8 +239,10 @@
                         <h2 id="userName">黄晓雅</h2>
                         <p id="userTitle">主治医师 | 肿瘤科</p>
                         <div style="display: flex; gap: 8px; margin-top: 6px;">
-                            <span class="status-tag" style="background: rgba(255,255,255,0.2); color: white; border: none; font-size: 10px;">三甲医院</span>
-                            <span class="status-tag" style="background: rgba(255,255,255,0.2); color: white; border: none; font-size: 10px;">南京鼓楼医院</span>
+                            <span class="status-tag"
+                                style="background: rgba(255,255,255,0.2); color: white; border: none; font-size: 10px;">三甲医院</span>
+                            <span class="status-tag"
+                                style="background: rgba(255,255,255,0.2); color: white; border: none; font-size: 10px;">南京鼓楼医院</span>
                         </div>
                     </div>
                 </div>
@@ -126,7 +258,7 @@
                     </div>
                     <div class="stats-item">
                         <div class="stats-value">2</div>
-                        <div class="stats-label">异常事件</div>
+                        <div class="stats-label">待办事项</div>
                     </div>
                 </div>
 
@@ -144,20 +276,33 @@
                 </div>
 
                 <div class="card animate-up" style="animation-delay: 0.3s;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                         <h3 style="font-size: 16px; font-weight: 700;">项目整体进度</h3>
                         <span style="font-size: 12px; color: var(--primary-color);">详情 ›</span>
                     </div>
-                    <div class="progress-bar"><div class="progress-inner"></div></div>
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+                    <div class="progress-bar">
+                        <div class="progress-inner"></div>
+                    </div>
+                    <div
+                        style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
                         <span>当前招募: 68/100</span>
                         <span>完成率: 68%</span>
                     </div>
                 </div>
 
                 <div class="card animate-up" style="animation-delay: 0.4s;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h3 style="font-size: 16px; font-weight: 700;">待办事项 <span style="color: var(--danger-color); font-size: 13px;">(1)</span></h3>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="font-size: 16px; font-weight: 700;">待办事项 <span
+                                id="todoCount" style="color: var(--danger-color); font-size: 13px;">(4)</span></h3>
+                        <div id="batchActionArea">
+                            <button class="sm-mini-btn" style="border-radius: 20px; padding: 4px 12px;" onclick="toggleBatchMode(true)">批量入组</button>
+                        </div>
+                        <div id="batchSubmitArea" class="hidden" style="display: flex; gap: 8px;">
+                            <button class="sm-mini-btn" style="border-radius: 20px; padding: 4px 12px; background: #F2F3F5; color: #4E5969; border:none;" onclick="toggleBatchMode(false)">取消</button>
+                            <button class="sm-mini-btn" style="border-radius: 20px; padding: 4px 12px; background: var(--primary-color); color: white; border:none;" onclick="handleBatchEnroll()">确认入组</button>
+                        </div>
                     </div>
                     <div id="todoList"></div>
                 </div>
@@ -166,7 +311,9 @@
 
         <!-- Tab 2: 患者管理入口 -->
         <section id="tab-management" class="tab-content hidden">
-            <div class="header"><h1>患者管理中心</h1></div>
+            <div class="header">
+                <h1>患者管理中心</h1>
+            </div>
             <div class="container animate-up">
                 <div class="action-grid" style="margin-top: 10px;">
                     <div class="action-btn-circle" onclick="App.navigateTo('patient-list.html')">
@@ -179,7 +326,7 @@
                     </div>
                     <div class="action-btn-circle" onclick="switchTab('ae')">
                         <div class="action-icon-circle bg-purple-solid">⚠️</div>
-                        <span class="action-label">异常事件</span>
+                        <span class="action-label">待办事项</span>
                     </div>
                     <div class="action-btn-circle" onclick="App.navigateTo('stats.html')">
                         <div class="action-icon-circle bg-green-solid">📊</div>
@@ -187,29 +334,47 @@
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; margin-bottom: 16px;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; margin-bottom: 16px;">
                     <h3 style="font-size: 16px; font-weight: 700;">近期患者列表</h3>
-                    <span style="font-size: 12px; color: var(--primary-color);" onclick="App.navigateTo('patient-list.html')">查看全部 ›</span>
+                    <span style="font-size: 12px; color: var(--primary-color);"
+                        onclick="App.navigateTo('patient-list.html')">查看全部 ›</span>
                 </div>
                 <div id="managementPatientList"></div>
             </div>
         </section>
 
-        <!-- Tab 3: 异常事件 -->
+        <!-- Tab 3: 待办事项 -->
         <section id="tab-ae" class="tab-content hidden">
-            <div class="header"><h1>待处理异常事件</h1></div>
-            <div class="container animate-up">
-                <div style="background: white; border-radius: 12px; height: 44px; display: flex; align-items: center; padding: 0 16px; border: 1px solid var(--glass-border); margin-bottom: 20px;">
-                    <span>🔍</span>
-                    <input type="text" placeholder="请输入患者姓名搜索" style="border: none; flex: 1; outline: none; font-size: 14px; margin-left: 8px;">
+            <div class="tab-header-bg">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1 style="margin:0; font-size: 24px; font-weight: 800;">待办事项</h1>
+                    <div id="batchActionAreaTab">
+                        <button class="sm-mini-btn" onclick="toggleBatchMode(true)">批量入组</button>
+                    </div>
+                    <div id="batchSubmitAreaTab" class="hidden" style="display: flex; gap: 8px;">
+                        <button class="sm-mini-btn" style="background: rgba(255,255,255,0.2); color: white; border:1px solid rgba(255,255,255,0.4);" onclick="toggleBatchMode(false)">取消</button>
+                        <button class="sm-mini-btn" style="background: white; color: var(--primary-color); border:none;" onclick="handleBatchEnroll()">确认入组</button>
+                    </div>
                 </div>
+            </div>
+
+            <div class="search-box-wrap">
+                <span style="font-size: 18px;">🔍</span>
+                <input type="text" placeholder="请输入患者姓名搜索"
+                    style="border: none; flex: 1; outline: none; font-size: 15px; margin-left: 10px; background:transparent;">
+            </div>
+
+            <div class="container animate-up" style="padding-top: 0;">
                 <div id="aeTabList"></div>
             </div>
         </section>
 
         <!-- Tab 4: 我的 -->
         <section id="tab-my" class="tab-content hidden">
-            <div class="header"><h1>个人中心</h1></div>
+            <div class="header">
+                <h1>个人中心</h1>
+            </div>
             <div class="container animate-up">
                 <div class="card" style="display: flex; align-items: center; gap: 16px;">
                     <img src="img/avatar.png" style="width: 60px; height: 60px; border-radius: 50%;">
@@ -223,7 +388,8 @@
                     <div class="list-item" onclick="App.navigateTo('messages.html')" style="cursor: pointer;">
                         <span>消息中心</span>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="badge" style="background: var(--danger-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;">5</span>
+                            <span class="badge"
+                                style="background: var(--danger-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;">5</span>
                             <span style="color: var(--text-muted);">›</span>
                         </div>
                     </div>
@@ -249,7 +415,7 @@
             </a>
             <a href="#" class="tab-item" onclick="switchTab('ae', event)">
                 <span class="tab-icon">⚠️</span>
-                <span>异常事件</span>
+                <span>待办事项</span>
             </a>
             <a href="#" class="tab-item" onclick="switchTab('my', event)">
                 <span class="tab-icon">👤</span>
@@ -260,9 +426,7 @@
 
     <script src="js/app.js"></script>
     <script>
-        if (App.checkAuth('index.html')) {
-            initPage();
-        }
+        let isBatchMode = false;
 
         function initPage() {
             const user = App.getUser();
@@ -270,7 +434,7 @@
             document.getElementById('userTitle').innerText = `${user.title} | ${user.dept}`;
             document.getElementById('myUserName').innerText = user.name;
             document.getElementById('myUserTitle').innerText = `${user.title} | ${user.dept}`;
-            
+
             renderTodos();
             renderManagementPatients();
         }
@@ -278,7 +442,7 @@
         function renderManagementPatients() {
             const list = document.getElementById('managementPatientList');
             if (!list) return;
-            
+
             list.innerHTML = MockData.patients.slice(0, 4).map(p => `
                 <div class="patient-card ${p.statusTag === 'danger' ? 'is-abnormal' : ''}" onclick="App.navigateTo('patient-detail.html?id=${p.id}')">
                     <div style="flex: 1;">
@@ -299,16 +463,57 @@
             `).join('');
         }
 
+        function toggleBatchMode(show) {
+            isBatchMode = show;
+            // 首页控制
+            const ba = document.getElementById('batchActionArea');
+            const bs = document.getElementById('batchSubmitArea');
+            if (ba) ba.style.display = show ? 'none' : 'block';
+            if (bs) bs.classList.toggle('hidden', !show);
+            
+            // 详情页控制
+            const baTab = document.getElementById('batchActionAreaTab');
+            const bsTab = document.getElementById('batchSubmitAreaTab');
+            if (baTab) baTab.style.display = show ? 'none' : 'block';
+            if (bsTab) bsTab.classList.toggle('hidden', !show);
+            
+            renderTodos();
+        }
+
+        function handleBatchEnroll() {
+            const checked = document.querySelectorAll('.todo-checkbox:checked');
+            if (checked.length === 0) {
+                alert('请选择要入组的患者');
+                return;
+            }
+            if (confirm(`确定要将选中的 ${checked.length} 位患者批量入组吗？`)) {
+                // 模拟处理逻辑：从 todoList 中移除选中的项
+                const ids = Array.from(checked).map(el => parseInt(el.value));
+                MockData.todoList = MockData.todoList.filter(item => !ids.includes(item.id));
+                
+                alert('批量入组成功！');
+                toggleBatchMode(false);
+                initPage(); // 刷新统计和列表
+            }
+        }
+
         function renderTodos() {
             const list = document.getElementById('todoList');
             const aeList = document.getElementById('aeTabList');
-            
+            const todoCount = document.getElementById('todoCount');
+            if (todoCount) todoCount.innerText = `(${MockData.todoList.length})`;
+
             if (list) {
                 list.innerHTML = MockData.todoList.map(item => {
                     const clickUrl = item.type === '入组确认' ? `enroll-confirm.html?id=${item.id}` : `ae-handler.html?id=${item.id}`;
+                    const isEnroll = item.type === '入组确认';
+                    
                     return `
-                    <div class="todo-item" onclick="App.navigateTo('${clickUrl}')">
-                        <div class="priority-dot dot-${item.priority}"></div>
+                    <div class="todo-item" onclick="${isBatchMode && isEnroll ? '' : `App.navigateTo('${clickUrl}')`}">
+                        ${isBatchMode && isEnroll ? `
+                            <input type="checkbox" class="todo-checkbox" value="${item.id}" style="width: 18px; height: 18px; margin-top: 2px;" onclick="event.stopPropagation()">
+                        ` : `<div class="priority-dot dot-${item.priority}"></div>`}
+                        
                         <div style="flex: 1;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <span style="font-weight: 700; font-size: 14px;">${item.type}</span>
@@ -317,7 +522,7 @@
                             <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">患者：${item.patient}</div>
                             <div style="font-size: 12px; color: var(--text-muted);">${item.desc}</div>
                         </div>
-                        <div style="align-self: center; background: var(--primary-soft); color: var(--primary-color); font-size: 12px; padding: 4px 12px; border-radius: 20px;">去处理</div>
+                        ${!isBatchMode ? `<div style="align-self: center; background: var(--primary-soft); color: var(--primary-color); font-size: 12px; padding: 4px 12px; border-radius: 20px;">去处理</div>` : ''}
                     </div>
                 `}).join('');
             }
@@ -325,9 +530,13 @@
             if (aeList) {
                 aeList.innerHTML = MockData.todoList.map(item => {
                     const clickUrl = item.type === '入组确认' ? `enroll-confirm.html?id=${item.id}` : `ae-handler.html?id=${item.id}`;
+                    const isEnroll = item.type === '入组确认';
+
                     return `
-                    <div class="patient-card" style="align-items: flex-start; cursor: pointer;" onclick="App.navigateTo('${clickUrl}')">
-                        <div class="priority-dot dot-${item.priority}" style="margin-right: 12px; margin-top: 6px;"></div>
+                    <div class="patient-card" style="align-items: flex-start; cursor: pointer;" onclick="${isBatchMode && isEnroll ? '' : `App.navigateTo('${clickUrl}')`}">
+                        ${isBatchMode && isEnroll ? `
+                            <input type="checkbox" class="todo-checkbox" value="${item.id}" style="width: 20px; height: 20px; margin-right: 12px; margin-top: 6px;" onclick="event.stopPropagation()">
+                        ` : `<div class="priority-dot dot-${item.priority}" style="margin-right: 12px; margin-top: 6px;"></div>`}
                         <div style="flex: 1;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <span style="font-weight: 700; font-size: 16px;">${item.type}</span>
@@ -336,7 +545,7 @@
                             <div style="font-size: 13px; color: var(--text-secondary); margin-top: 6px;">患者：<span style="font-weight: 600;">${item.patient}</span></div>
                             <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">描述：${item.desc}</div>
                         </div>
-                        <div style="align-self: center; background: var(--primary-soft); color: var(--primary-color); font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px; margin-left: 10px;">去处理</div>
+                        ${!isBatchMode ? `<div style="align-self: center; background: var(--primary-soft); color: var(--primary-color); font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px; margin-left: 10px;">去处理</div>` : ''}
                     </div>
                 `}).join('');
             }
@@ -356,13 +565,19 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
             document.getElementById(`tab-${tab}`).classList.remove('hidden');
             document.querySelectorAll('.tab-item').forEach(i => i.classList.remove('active'));
-            
+
             const tabs = ['home', 'management', 'ae', 'my'];
             const index = tabs.indexOf(tab);
             if (index !== -1) {
                 document.querySelectorAll('.tab-item')[index].classList.add('active');
             }
         }
+
+        // 页面入口：确保所有函数定义加载后再初始化
+        if (App.checkAuth('index.html')) {
+            initPage();
+        }
     </script>
 </body>
+
 </html>

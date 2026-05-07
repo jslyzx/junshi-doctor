@@ -289,6 +289,184 @@
                 opacity: 1;
             }
         }
+
+        /* 用药历程样式 */
+        .med-journey {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 4px 4px 16px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .med-journey::-webkit-scrollbar { display: none; }
+
+        .med-step {
+            flex: 0 0 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .med-step::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #E5E6EB;
+            z-index: 1;
+        }
+        .med-step:last-child::after { display: none; }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #E5E6EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            z-index: 2;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+        .med-step.active .step-circle {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 82, 217, 0.2);
+        }
+        .med-step.completed .step-circle {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        .med-step.warning .step-circle {
+            border-color: var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 2px;
+        }
+        .step-date {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .step-badge {
+            font-size: 9px;
+            padding: 1px 4px;
+            border-radius: 4px;
+            margin-top: 4px;
+            font-weight: 700;
+        }
+        .badge-pd1 { background: #E6F0FF; color: #0052D9; }
+        .badge-ae { background: #FFF1F0; color: #FF4D4F; }
+
+        /* 治疗历程时间轴弹窗样式 */
+        .history-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #F4F7FC;
+            z-index: 1500;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .history-modal.active { display: flex; animation: slideInUp 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+        
+        .history-header {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #E5E6EB;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .history-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .h-timeline {
+            position: relative;
+            padding-left: 24px;
+        }
+        .h-timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px; top: 0; bottom: 0;
+            width: 2px;
+            background: #DDE2EE;
+        }
+        .h-event {
+            position: relative;
+            margin-bottom: 24px;
+        }
+        .h-dot {
+            position: absolute;
+            left: -21px; top: 4px;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--primary-color);
+            z-index: 2;
+        }
+        .h-dot.milestone { background: var(--primary-color); }
+        .h-dot.warning { border-color: var(--warning-color); }
+        
+        .h-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            border: 1px solid #EBEDF2;
+        }
+        .h-type {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .h-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1D2129;
+            margin-bottom: 8px;
+        }
+        .h-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: flex;
+            gap: 12px;
+        }
+        .h-detail {
+            font-size: 13px;
+            color: #4E5969;
+            line-height: 1.6;
+            background: #F7F8FA;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
     </style>
 </head>
 
@@ -332,40 +510,49 @@
             </div>
         </div>
 
-        <!-- 指标趋势展示 -->
+        <!-- 用药历程 -->
         <div class="card">
-            <div class="card-title" style="font-size: 15px;">肿瘤标志物趋势图 (CEA)</div>
-            <div class="trend-chart">
-                <div class="trend-point">
-                    <div class="point-dot" style="bottom: 80%;"></div><span
-                        style="font-size: 9px; margin-top: 4px;">D1</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-size: 16px; font-weight: 700;">用药历程</h3>
+                <span style="font-size: 11px; color: var(--text-muted);">Q2W 方案</span>
+            </div>
+            <div class="med-journey">
+                <div class="med-step completed">
+                    <div class="step-circle">C1D1</div>
+                    <div class="step-label">首次给药</div>
+                    <div class="step-date">2024-03-24</div>
+                    <div class="step-badge badge-pd1">拓益 240mg</div>
                 </div>
-                <div class="trend-point">
-                    <div class="point-dot" style="bottom: 70%;"></div><span
-                        style="font-size: 9px; margin-top: 4px;">D7</span>
+                <div class="med-step completed">
+                    <div class="step-circle">C2D1</div>
+                    <div class="step-label">第 2 周期</div>
+                    <div class="step-date">2024-04-07</div>
+                    <div class="step-badge badge-pd1">拓益 240mg</div>
                 </div>
-                <div class="trend-point">
-                    <div class="point-dot" style="bottom: 40%;"></div><span
-                        style="font-size: 9px; margin-top: 4px;">D14</span>
+                <div class="med-step warning">
+                    <div class="step-circle">C3D1</div>
+                    <div class="step-label">第 3 周期</div>
+                    <div class="step-date">2024-04-21</div>
+                    <div class="step-badge badge-ae">irAE G2</div>
                 </div>
-                <div class="trend-point">
-                    <div class="point-dot" style="bottom: 45%;"></div><span
-                        style="font-size: 9px; margin-top: 4px;">D21</span>
+                <div class="med-step active">
+                    <div class="step-circle">C4D1</div>
+                    <div class="step-label">进行中</div>
+                    <div class="step-date">2024-05-05</div>
+                    <div class="step-badge badge-pd1">待执行</div>
                 </div>
-                <div class="trend-point">
-                    <div class="point-dot" style="bottom: 20%;"></div><span
-                        style="font-size: 9px; margin-top: 4px;">D28</span>
+                <div class="med-step">
+                    <div class="step-circle">C5D1</div>
+                    <div class="step-label">第 5 周期</div>
+                    <div class="step-date">2024-05-19</div>
                 </div>
             </div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px; font-style: italic;">▲
-                趋势说明：患者经首轮给药后，指标呈现显著下降趋势。</p>
         </div>
 
         <!-- 建档档案 (OCR 结果) -->
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                 <h3 style="font-size: 16px; font-weight: 700;">建档档案</h3>
-                <span style="font-size: 11px; color: var(--primary-color); font-weight: 600;">AI 辅助建档</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                 <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;"
@@ -397,10 +584,10 @@
                 </div>
                 <div style="background: var(--primary-soft); padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s;"
                     onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'"
-                    onclick="openViewer('https://picsum.photos/id/1054/800/1000', '历史处方')">
+                    onclick="openHistoryModal()">
                     <span style="font-size: 20px;">💊</span>
                     <div>
-                        <div style="font-size: 13px; font-weight: 600;">历史处方</div>
+                        <div style="font-size: 13px; font-weight: 600;">治疗历程</div>
                         <div style="font-size: 10px; color: var(--text-muted);">已同步</div>
                     </div>
                 </div>
@@ -411,6 +598,54 @@
         <div class="card">
             <h3 style="font-size: 16px; font-weight: 700;">临床事件轴</h3>
             <div class="timeline-container" id="timelineList"></div>
+        </div>
+    </div>
+
+    <!-- 治疗历程详情弹窗 -->
+    <div id="historyModal" class="history-modal">
+        <div class="history-header">
+            <div style="font-size: 18px; font-weight: 700;">治疗历程详情</div>
+            <div style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #F2F3F5; border-radius: 50%; cursor: pointer;" onclick="closeHistoryModal()">✕</div>
+        </div>
+        <div class="history-body">
+            <div class="h-timeline">
+                <div class="h-event">
+                    <div class="h-dot milestone"></div>
+                    <div class="h-card">
+                        <div class="h-type"><span>📍</span> 确诊与分期</div>
+                        <div class="h-title">非小细胞肺癌 (NSCLC) IIIb期</div>
+                        <div class="h-meta"><span>📅 2024-02-15</span> <span>🏥 瑞金医院</span></div>
+                        <div class="h-detail">患者因长期干咳就诊，CT示左肺上叶占位，气管镜病理示腺癌。PD-L1表达 TPS=45%。</div>
+                    </div>
+                </div>
+                <div class="h-event">
+                    <div class="h-dot milestone"></div>
+                    <div class="h-card">
+                        <div class="h-type"><span>💊</span> 治疗方案确定</div>
+                        <div class="h-title">特瑞普利单抗 联合 培美曲塞+顺铂</div>
+                        <div class="h-meta"><span>📅 2024-03-24</span> <span>👨‍⚕️ 王晓雅主任</span></div>
+                        <div class="h-detail">一线治疗方案。特瑞普利单抗 240mg Q3W。</div>
+                    </div>
+                </div>
+                <div class="h-event">
+                    <div class="h-dot"></div>
+                    <div class="h-card">
+                        <div class="h-type"><span>🧪</span> 疗效评价 (Efficacy)</div>
+                        <div class="h-title">部分缓解 (PR) - 首次评价</div>
+                        <div class="h-meta"><span>📅 2024-04-28</span> <span>📊 RECIST 1.1</span></div>
+                        <div class="h-detail">靶病灶长径总和较基线缩小 32%，符合 PR 标准。无新发病灶。</div>
+                    </div>
+                </div>
+                <div class="h-event">
+                    <div class="h-dot warning"></div>
+                    <div class="h-card">
+                        <div class="h-type" style="color:var(--warning-color)"><span>⚠️</span> 不良反应记录</div>
+                        <div class="h-title">免疫相关性甲状腺功能减退</div>
+                        <div class="h-meta"><span>📅 2024-05-02</span> <span>Grade: 2</span></div>
+                        <div class="h-detail">TSH 升高，FT4 降低。开始口服左甲状腺素钠片 50μg qd 替代治疗。</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -499,6 +734,14 @@
 
         function closeViewer() {
             document.getElementById('imageViewer').classList.remove('active');
+        }
+
+        function openHistoryModal() {
+            document.getElementById('historyModal').classList.add('active');
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('historyModal').classList.remove('active');
         }
     </script>
 </body>
